@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/example.css">
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="js/js.cookie.js" charset="utf-8"></script>
+  <script src="js/showdown.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+  //document.cookie = "ctf=kek";
+  </script>
+</head>
+<body>
+  <form id="login-form">
+    <div id="login">
+    <div id="login_header"> Добро пожаловать на NSK School CTF 2017!</div>
+    Введите свои данные авторизации
+    <div>
+      <input
+          type="text"
+          placeholder="example@site.com"
+          id="username"
+          name="username"/>
+      </div>
+    <div>
+      <input
+          placeholder="password"
+          type="password"
+          id="password"
+          name="password"/>
+      </div>
+    <div>
+      <input id="input_submit" type="submit" value="Войти"></div>
+  </div>
+  </form>
+  <div id="content">
+    <div id="header">
+      <div id="header-table" class="dropdown">
+        <button class="dropbtn" onmouseover="checkScore();">Рейтинг</button>
+        <div id="teams" class="dropdown-content">
+        </div>
+      </div>
+      <div id="header-title">
+        NSK School CTF 2017
+      </div>
+      <div id="header-profile" class="dropdown">
+        <button class="dropbtn" id="profile-usr" onmouseover="checkProfile();">Профиль (Life)</button>
+        <div class="dropdown-content">
+          <div class='cont-content'>
+          <a href="#" id="profile-pts">Очков: </a>
+          <a href="#" id="profile-slv" >Тасков: </a>
+          <a href="#" id="profile-pos">Позиция: </a>
+          <a href="#" id="profile-att">Посылок: </a>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div id="map">
+      <div id="task">
+        <div id="task-title"> Title
+        </div>
+        <div id="task-desc">Description</div>
+        <div id="task-flag"></div>
+      </div>
+      <div id="tmp">
+      </div>
+      <div class="point easy" style="top: 300px; left: 300px;" task_id=1></div>
+	<div class="point easy" style="top: 1055px; left: 239px;" task_id=2></div>
+	<div class="point easy" style="top: 572px; left: 358px;" task_id=3></div>
+	<div class="point easy" style="top: 825px; left: 444px;" task_id=4></div>
+	<div class="point easy" style="top: 1079px; left: 360px;" task_id=5></div>
+	<div class="point easy" style="top: 1200px; left: 361px;" task_id=6></div>
+	<div class="point easy" style="top: 687px; left: 405px;" task_id=7></div>
+	<div class="point easy" style="top: 814px; left: 360px;" task_id=8></div>
+	<div class="point easy" style="top: 1116px; left: 453px;" task_id=9></div>
+	<div class="point easy" style="top: 54px; left: 528px;" task_id=10></div>
+	<div class="point easy" style="top: 345px; left: 425px;" task_id=11></div>
+	<div class="point easy" style="top: 926px; left: 610px;" task_id=12></div>
+	<div class="point easy" style="top: 303px; left: 549px;" task_id=13></div>
+	<div class="point easy" style="top: 613px; left: 635px;" task_id=14></div>
+	<div class="point easy" style="top: 1090px; left: 505px;" task_id=15></div>
+	<div class="point easy" style="top: 356px; left: 556px;" task_id=16></div>
+	<div class="point easy" style="top: 744px; left: 477px;" task_id=17></div>
+	<div class="point easy" style="top: 1082px; left: 421px;" task_id=18></div>
+	<div class="point easy" style="top: 47px; left: 435px;" task_id=19></div>
+	<div class="point easy" style="top: 362px; left: 571px;" task_id=20></div>
+	<div class="point easy" style="top: 680px; left: 481px;" task_id=21></div>
+	<div class="point easy" style="top: 729px; left: 613px;" task_id=22></div>
+	<div class="point easy" style="top: 147px; left: 430px;" task_id=23></div>
+	<div class="point easy" style="top: 164px; left: 474px;" task_id=24></div>
+	<div class="point easy" style="top: 717px; left: 268px;" task_id=25></div>
+
+    </div>
+  </div>
+</body>
+<script src="js/script.js" charset="utf-8"></script>
+</html>
