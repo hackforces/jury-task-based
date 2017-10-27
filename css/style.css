@@ -113,6 +113,7 @@ body{
 }
 
 #task{
+  user-select: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -145,6 +146,11 @@ body{
   background-color: #212121;
   font-size: 20px;
   line-height: normal;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  height: auto;
+
 }
 #task-flag {
   font-size: 24px;
@@ -175,7 +181,8 @@ body{
   height: 100%;
 }
 #btn{
-  font-size: 24px;
+  font-size: 18px;
+  line-height: 18px;
   position:absolute;
   left: 72%;
   width: 28%;

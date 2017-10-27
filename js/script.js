@@ -1,4 +1,4 @@
-var HOST = "https://school.nskctf.ru/api/"
+var HOST = "https://mctf.moscow/api/"
 var curYPos = 0,
 curXPos = 0,
 curDown = false;
@@ -9,10 +9,10 @@ var converter = new showdown.Converter();
 
 function handleMouse(e) {
   if(curDown === true && document.getElementById("task").style.visibility == "hidden") {
-    if(isFirefox)
+    //if(isFirefox)
       window.scrollTo(document.body.scrollLeft + (curXPos - e.clientX), document.body.scrollTop + (curYPos - e.clientY));
-    else
-      window.scrollTo(document.body.scrollLeft + (curXPos - e.pageX), document.body.scrollTop + (curYPos - e.pageY));
+    //else
+      // window.scrollTo(document.body.scrollLeft + (curXPos - e.pageX), document.body.scrollTop + (curYPos - e.pageY));
   }
 }
 
@@ -29,10 +29,11 @@ $(".point").click(function() {
   $.ajax({
     type: "GET",
     dataType: "json",
+    crossDomain: true,
     url: HOST + "task.detail?guid=" + $(this).attr("task_id"),
     success: function(data) {
-      $("#task-title").text(data.title);
-      $("#task-desc").text(data.description);
+      $("#task-title").text(data.title + " (" + data.points + ")");
+      $("#task-desc").html(data.description);
       $("#task").attr("task_id", data.guid);
       renderTaskInput();
       //$("#task-desc").html(converter.makeHtml(data.description));
@@ -46,23 +47,28 @@ $(".point").click(function() {
 /* for rating showing */
 function checkTask() {
   if(!Cookies.get('ctf'))
+  {
     checkAuth();
+    console.log("KEK");
+  }
   else
   {
     $.ajax({
       type: "POST",
       dataType: "json",
+      crossDomain: true,
       data: {guid: $("#task").attr("task_id"), keyphrase: $("#keyphrase").val(), token: Cookies.get('ctf')},
       url: HOST + "user.checkTask",
       success: function(data) {
-        // console.log(data);
+        console.log(data);
         $('#task-flag').css({"background-color": "#257227"}).html("Вы успешно сдали таск!")
         setTimeout(function () {
           $('#task').css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0}, 300);
         }, 2000);
+        $("#task").css('visibility','hidden');
       },
       error: function(err) {
-        // console.log(err);
+        console.log(err);
         // console.log(JSON.parse(err.responseText).status);
         if(err.status == 401)
         {
@@ -80,12 +86,36 @@ function checkTask() {
     })
   }
 };
+
+function checkCompletedTasks() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "tasks.get?count=150&contest=10&token=" + Cookies.get('ctf'),
+    success: function(data) {
+      $.each(data, function( index, value ){
+        if(value.solved)
+          $("#task"+value.guid).css('visibility','hidden')
+      })
+    },
+    error: function(err) {
+      if(err.status == 401)
+      {
+        Cookies.remove('ctf');
+        checkAuth();
+      }
+    }
+  })
+  }
+
 /* for rating showing */
 function checkScore() {
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: HOST + "users.rating?guid=1",
+    crossDomain: true,
+    url: HOST + "users.rating?guid=10",
     success: function(data) {
       $("#teams").empty()
       var content = "<table>\n"
@@ -95,6 +125,13 @@ function checkScore() {
       })
       content +="</table>\n"
       $("#teams").append(content)
+    },
+    error: function(err) {
+      if(err.status == 401)
+      {
+        Cookies.remove('ctf');
+        checkAuth();
+      }
     }
   })
 };
@@ -103,7 +140,8 @@ function checkProfile() {
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: HOST + "user.getStat?contest=1&token=" + Cookies.get('ctf'),
+    crossDomain: true,
+    url: HOST + "user.getStat?contest=10&token=" + Cookies.get('ctf'),
     success: function(data) {
       $("#profile-usr").text("Профиль (" + data.username + ")");
       $("#profile-pos").text("Позиция: " + data.position);
@@ -127,10 +165,12 @@ function checkAuth() {
   if(Cookies.get('ctf')) {
     $('#content').css({opacity: 0.0, visibility: "visible"}).animate({opacity: 1.0}, 300);
     $("#login").css('visibility','hidden');
+    checkCompletedTasks()
     checkScore()
     checkProfile()
   }
   else {
+    $('#task').css({opacity: 0.0, visibility: "hidden"})
     $("#content").css('visibility','hidden');
     $('#login').css({opacity: 0.0, visibility: "visible"}).animate({opacity: 1.0}, 300);
   }
@@ -139,6 +179,7 @@ function Auth(user, pass) {
   $.ajax({
     type: "POST",
     dataType: "json",
+    crossDomain: true,
     data: {email: user, password: pass},
     url: HOST + "user.getToken",
     success: function(data) {
