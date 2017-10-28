@@ -1,4 +1,5 @@
-var HOST = "https://mctf.moscow/api/"
+var HOST = "https://api.hackforces.com/api/"
+var contest = 9;
 var curYPos = 0,
 curXPos = 0,
 curDown = false;
@@ -57,15 +58,17 @@ function checkTask() {
       type: "POST",
       dataType: "json",
       crossDomain: true,
-      data: {guid: $("#task").attr("task_id"), keyphrase: $("#keyphrase").val(), token: Cookies.get('ctf')},
+      data: {guid: $("#task").attr("task_id"), keyphrase: $("#keyphrase").val(), contest_guid: contest, token: Cookies.get('ctf')},
       url: HOST + "user.checkTask",
       success: function(data) {
-        console.log(data);
         $('#task-flag').css({"background-color": "#257227"}).html("Вы успешно сдали таск!")
         setTimeout(function () {
-          $('#task').css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0}, 300);
-        }, 2000);
+	// $("#task").hide("slow");
+	$("#task" + $("#task").attr("task_id")).hide("slow");
+        // $('#task').css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0}, 300);
         $("#task").css('visibility','hidden');
+	}, 2000);
+        // $("#task").css('visibility','hidden');
       },
       error: function(err) {
         console.log(err);
@@ -92,7 +95,7 @@ function checkCompletedTasks() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "tasks.get?count=150&contest=10&token=" + Cookies.get('ctf'),
+    url: HOST + "tasks.get?count=150&contest=9&token=" + Cookies.get('ctf'),
     success: function(data) {
       $.each(data, function( index, value ){
         if(value.solved)
@@ -115,7 +118,7 @@ function checkScore() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "users.rating?guid=10",
+    url: HOST + "users.rating?guid=9",
     success: function(data) {
       $("#teams").empty()
       var content = "<table>\n"
@@ -141,7 +144,7 @@ function checkProfile() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "user.getStat?contest=10&token=" + Cookies.get('ctf'),
+    url: HOST + "user.getStat?contest=9&token=" + Cookies.get('ctf'),
     success: function(data) {
       $("#profile-usr").text("Профиль (" + data.username + ")");
       $("#profile-pos").text("Позиция: " + data.position);
