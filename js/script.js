@@ -102,9 +102,9 @@ function checkCompletedTasks() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "tasks.get?count=150&contest=9&token=" + Cookies.get('ctf'),
+    url: HOST + "contest.detail?guid=" + contest + "&token=" + Cookies.get('ctf'),
     success: function(data) {
-      $.each(data, function( index, value ){
+      $.each(data.tasks, function( index, value ){
         if(value.solved)
           $("#task"+value.guid).css('visibility','hidden')
       })
@@ -198,8 +198,8 @@ function Auth(user, pass) {
         Cookies.set('ctf', data.token, { expires: 1 });
         checkAuth();
     },
-    error: function(t) {
-      //console.log(t);
+    error: function(err) {
+      alert("ERROR: " + err.responseJSON.message)
     }
   })
 }
