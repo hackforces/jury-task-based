@@ -6,7 +6,16 @@ curDown = false;
 var x = 0, y = 0;
 var isChrome = !!window.chrome && !!window.chrome.webstore;
 var isFirefox = typeof InstallTrigger !== 'undefined';
-var converter = new showdown.Converter();
+// var converter = new showdown.Converter();
+
+function urlify(text) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+    // or alternatively
+    // return text.replace(urlRegex, '<a href="$1">$1</a>')
+}
 
 function handleMouse(e) {
   if(curDown === true && document.getElementById("task").style.visibility == "hidden") {
@@ -34,7 +43,7 @@ $(".point").click(function() {
     url: HOST + "task.detail?guid=" + $(this).attr("task_id"),
     success: function(data) {
       $("#task-title").text(data.title + " (" + data.points + ")");
-      $("#task-desc").html(data.description);
+      $("#task-desc").html(urlify(data.description));
       $("#task").attr("task_id", data.guid);
       renderTaskInput();
       //$("#task-desc").html(converter.makeHtml(data.description));
@@ -63,11 +72,9 @@ function checkTask() {
       success: function(data) {
         $('#task-flag').css({"background-color": "#257227"}).html("Вы успешно сдали таск!")
         setTimeout(function () {
-	// $("#task").hide("slow");
-	$("#task" + $("#task").attr("task_id")).hide("slow");
-        // $('#task').css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0.0}, 300);
-        $("#task").css('visibility','hidden');
-	}, 2000);
+	         $("#task" + $("#task").attr("task_id")).hide("slow");
+           $("#task").css('visibility','hidden');
+	        }, 2000);
         // $("#task").css('visibility','hidden');
       },
       error: function(err) {
@@ -149,7 +156,7 @@ function checkProfile() {
       $("#profile-usr").text("Профиль (" + data.username + ")");
       $("#profile-pos").text("Позиция: " + data.position);
       $("#profile-pts").text("Очков: " + data.points);
-      $("#profile-att").text("Попыток " + data.attempts);
+      $("#profile-att").text("Попыток: " + data.attempts);
       $("#profile-slv").text("Решено: " + data.solved + " / " + data.tasks);
       // console.log(data);
     },
