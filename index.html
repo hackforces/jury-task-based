@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>J*CTF 2017 - система жюри</title>
+  <title>InnoCTF 2017</title>
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/example.css">
@@ -19,8 +19,8 @@
 <body>
   <form id="login-form">
     <div id="login">
-    <div id="login_header"> Добро пожаловать на J*CTF 2017!</div>
-    Введите свои данные авторизации
+    <div id="login_header"> Welcome to InnoCTF 2017!</div>
+    Please, write your credentials
     <div>
       <input
           type="text"
@@ -36,13 +36,13 @@
           name="password"/>
       </div>
     <div>
-      <input id="input_submit" type="submit" value="Войти"></div>
+      <input id="input_submit" type="submit" value="LogIn"></div>
   </div>
   </form>
   <div id="content">
     <div id="header">
       <div id="header-table" class="dropdown">
-        <button class="dropbtn" onmouseover="checkScore();">Рейтинг</button>
+        <button class="dropbtn" onmouseover="checkScore();">Rating</button>
         <div id="teams" class="dropdown-content">
         </div>
       </div>
@@ -50,13 +50,13 @@
         J*CTF 2017
       </div>
       <div id="header-profile" class="dropdown">
-        <button class="dropbtn" id="profile-usr" onmouseover="checkProfile();">Профиль (Life)</button>
+        <button class="dropbtn" id="profile-usr" onmouseover="checkProfile();">Profile (Life)</button>
         <div class="dropdown-content">
           <div class='cont-content'>
-            <p id="profile-pts">Очков: </p>
-            <p id="profile-slv">Тасков: </p>
-            <p id="profile-pos">Позиция: </p>
-            <p id="profile-att">Посылок: </p>
+            <p id="profile-pts">Points: </p>
+            <p id="profile-slv">Tasks: </p>
+            <p id="profile-pos">Position: </p>
+            <p id="profile-att">Tries: </p>
         </div>
         </div>
       </div>

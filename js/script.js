@@ -1,5 +1,5 @@
 var HOST = "https://api.hackforces.com/api/"
-var contest = 9;
+var contest = 11;
 var curYPos = 0,
 curXPos = 0,
 curDown = false;
@@ -44,6 +44,8 @@ $(".point").click(function() {
     success: function(data) {
       $("#task-title").text(data.title + " (" + data.points + ")");
       $("#task-desc").html(urlify(data.description));
+      $("#task-tags").html(data.tags);
+      $("#task-author").html(data.author);
       $("#task").attr("task_id", data.guid);
       renderTaskInput();
       //$("#task-desc").html(converter.makeHtml(data.description));
@@ -59,7 +61,7 @@ function checkTask() {
   if(!Cookies.get('ctf'))
   {
     checkAuth();
-    console.log("KEK");
+    // console.log("KEK");
   }
   else
   {
@@ -70,7 +72,7 @@ function checkTask() {
       data: {guid: $("#task").attr("task_id"), keyphrase: $("#keyphrase").val(), contest_guid: contest, token: Cookies.get('ctf')},
       url: HOST + "user.checkTask",
       success: function(data) {
-        $('#task-flag').css({"background-color": "#257227"}).html("Вы успешно сдали таск!")
+        $('#task-flag').css({"background-color": "#257227"}).html("You successfully passed this task!")
         setTimeout(function () {
 	         $("#task" + $("#task").attr("task_id")).hide("slow");
            $("#task").css('visibility','hidden');
@@ -153,11 +155,11 @@ function checkProfile() {
     crossDomain: true,
     url: HOST + "user.getStat?contest=9&token=" + Cookies.get('ctf'),
     success: function(data) {
-      $("#profile-usr").text("Профиль (" + data.username + ")");
-      $("#profile-pos").text("Позиция: " + data.position);
-      $("#profile-pts").text("Очков: " + data.points);
-      $("#profile-att").text("Попыток: " + data.attempts);
-      $("#profile-slv").text("Решено: " + data.solved + " / " + data.tasks);
+      $("#profile-usr").text("Profile (" + data.username + ")");
+      $("#profile-pos").text("Position: " + data.position);
+      $("#profile-pts").text("Points: " + data.points);
+      $("#profile-att").text("Tries: " + data.attempts);
+      $("#profile-slv").text("Progress: " + data.solved + " / " + data.tasks);
       // console.log(data);
     },
     error: function(err) {
