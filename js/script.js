@@ -40,12 +40,14 @@ $(".point").click(function() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "task.detail?guid=" + $(this).attr("task_id"),
+    url: HOST + "task.detail",
+    data: {guid: $(this).attr("task_id")},
     success: function(data) {
       $("#task-title").text(data.title + " (" + data.points + ")");
       $("#task-desc").html(urlify(data.description));
-      $("#task-tags").html(data.tags);
-      $("#task-author").html(data.author);
+      $("#task-author").html("Author: " + data.author);
+      // console.log(data.tags.split(',').join(" #"))
+      $("#task-tags").html("Tags: " + data.tags);
       $("#task").attr("task_id", data.guid);
       renderTaskInput();
       //$("#task-desc").html(converter.makeHtml(data.description));
@@ -104,7 +106,8 @@ function checkCompletedTasks() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "contest.detail?guid=" + contest + "&token=" + Cookies.get('ctf'),
+    url: HOST + "contest.detail",
+    data: {guid: contest, token: Cookies.get('ctf')},
     success: function(data) {
       $.each(data.tasks, function( index, value ){
         if(value.solved)
@@ -127,7 +130,8 @@ function checkScore() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "users.rating?guid=9",
+    url: HOST + "users.rating",
+    data: {guid: contest},
     success: function(data) {
       $("#teams").empty()
       var content = "<table>\n"
@@ -153,7 +157,8 @@ function checkProfile() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "user.getStat?contest=9&token=" + Cookies.get('ctf'),
+    url: HOST + "user.getStat",
+    data: {contest: contest, token: Cookies.get('ctf')},
     success: function(data) {
       $("#profile-usr").text("Profile (" + data.username + ")");
       $("#profile-pos").text("Position: " + data.position);
