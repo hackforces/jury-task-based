@@ -1,5 +1,5 @@
 var HOST = "https://api.hackforces.com/api/"
-var contest = 11;
+var contest = 12;
 
 function checkScore() {
   $.ajax({
