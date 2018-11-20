@@ -1,0 +1,374 @@
+body {
+  background: transparent;
+}
+/* body, html {
+    height: 100%;
+} */
+/* Background style */
+#particles-js {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-size: cover;
+	background-position: center 75%;
+}
+
+#particles-js > canvas {
+	background-color: rgb(103,124,131);
+}
+
+/* .back_img img{
+  margin: auto 55%;
+  position: fixed;
+  height: 100%;
+  } */
+
+.back_img {
+          /* The image used */
+    background-image: url('/img/background.png');
+
+    /* Full height */
+    height: 100%; 
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* z-index: -5; */
+    margin: auto 30%;
+    position: fixed;
+    /* height: 100%; */
+    /* background: url() no-repeat; */
+  }
+
+
+/*
+ * Some bootstrap overrides
+ */
+
+.full {
+background-color: #3c0458;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+.table > thead > tr > th {
+   background-color: rgba(0, 0, 0, 0.5); 
+   color: #eee;
+}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: rgba(255, 255, 255, 0.75);
+}
+.table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n) > th {
+   background-color: rgba(255, 255, 255, 0.5);
+}
+.navbar-collapse{
+  left:10px;
+  padding: 2px;
+  position: relative;
+}
+
+
+
+.navbar-form{
+  padding-bottom: 7px;
+}
+
+/*
+ * Landing page
+ */
+
+.landing-page {
+    padding-top: 100px;
+}
+
+.landing-page h1 {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.nav{
+  top:5px;
+  position: relative;
+}
+
+/*
+ * Main circle
+ */
+
+.circle {
+    margin: 0;
+    width:550px;
+    height:550px;
+    padding-top: 120px;
+    border-radius:50%;
+    text-align:center;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.circle::after {
+  border-radius:50%;
+  content: "";
+  background: url('/img/1234.png')no-repeat center center; 
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+
+.circle-inner {
+
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 14pt;
+}
+
+.white {
+    color: #ddd; /* I lied */
+    padding-top: 8px;
+}
+
+/*
+ * Tasks page
+ */
+
+.chall-box {
+    margin: 20px;
+    width: 120px;
+    height: 120px;
+    padding-top: 45px;
+    border-radius: 50%;
+    text-align:center;
+    background-color: #fff;
+    font-size: 16pt;
+    color: #333;
+}
+
+
+
+.shadow_categories{
+
+   animation: blink 2s linear infinite;
+   animation: shadow_categories 2s infinite;
+}
+
+.shadow_task{
+    
+    cursor: pointer;
+ box-shadow: 
+  inset 0 0 1px 2px #7e826a,
+    0 0 1px 1px #7e826a;
+    transition: 0.5s;
+}
+
+.shadow_task:hover{
+  box-shadow: 0 0 5px 4px rgba(252, 243, 207, 1);
+  color: white;
+  background-color: rgba(59,18,82, 0.8);
+  transition: 0.5s;
+  animation: shadow_task 0.5s;
+  animation-direction: alternate-reverse;
+
+}
+
+
+@-webkit-keyframes shadow_task {
+  
+  100% {
+     -moz-box-shadow: 0 0 50px 30px rgba(23, 165, 137,0);
+      box-shadow: 0 0 50px 30px rgba(23, 165, 137,0);
+  }
+
+}
+
+@keyframes shadow_task {
+  100% {
+     -moz-box-shadow: 0 0 50px 30px rgba(23, 165, 137,0);
+      box-shadow: 0 0 50px 30px rgba(23, 165, 137,0);
+  }
+
+
+
+}
+@-webkit-keyframes shadow_categories {
+   0% {
+    -moz-box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+    box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+  }
+  70% {
+      -moz-box-shadow: 0 0 7px 8px rgba(51,204,153, 0.5);
+      box-shadow: 0 0 7px 8px rgba(51,204,153, 0.5);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+      box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+  }
+}
+@keyframes shadow_categories {
+  0% {
+    -moz-box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+    box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+  }
+  70% {
+      -moz-box-shadow: 0 0 7px 8px rgba(51,204,153, 0.5);
+      box-shadow: 0 0 7px 8px rgba(51,204,153, 0.5);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+      box-shadow: 0 0 0 3px rgba(51,204,153, 1);
+  }
+}
+
+.chall-category {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+}
+
+.chall-done {
+    -webkit-box-shadow: 0 0 10px 3px #51A351;
+    box-shadow: 0 0 10px 3px #51A351;
+}
+
+.chall-highlight {
+    -webkit-box-shadow: 0 0 10px 3px #0088CC;
+    box-shadow: 0 0 10px 3px #0088CC;
+}
+
+.chall-hidden {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+/*
+ * Individual tasks
+ */
+.task-box-head{
+    box-shadow: -4px -4px 4px 0px rgba(0, 0, 0, 0.5);
+    background-color: #101010;
+    /* height: auto; */
+    /* width: 50%; */
+    text-align: center;
+    padding-top: 1px;
+    color: rgba(51,204,153, 1);
+    /* min-height: calc(80% - 20px);
+    height: 900px; */
+    /* margin-top: 15%; */
+    /* margin-left:15%; */
+}
+.zag {
+   font-size: 25px;
+}
+.task-box {
+    position: relative;
+    background-color: rgba(41, 41, 41, 0.9);
+    margin-top: 10px;
+    width: 100%;
+    /* padding: 15px; */
+    /* top:-10px; */
+}
+.task-box>p {
+    padding: 10px;
+}
+.reg-box-head{
+    /* top:100px; */
+    box-shadow: 0px 0px 4px 4px rgba(255, 255, 255, 0.5);
+    background-color:rgba(51,204,153, 1);
+    /* width: 60%; */
+    height: auto;
+    /* margin-left: 20%; */
+    padding-bottom: 10px;
+    color: #3c0458;
+    text-align: center;
+}
+.btn-info {
+    background-color: #3c0458;
+}
+.btn-info:hover {
+    background-color: #3c0458;
+}
+.reg-box {
+
+   padding-top: 5px;
+    position:relative;
+    top: 0;
+    /* background-color: #3c0458; */
+    width: 100%;
+    margin-left: 0;
+}
+
+.submit-form{
+  width: 100%;
+  display: inline;
+}
+
+.task-box input {
+    width: 79%;
+    display: inline-block;
+  }
+.task-box button {
+    width: 20%;
+    display: inline-block;
+  }
+
+.task-box h1 {
+    padding-bottom: 0px;
+}
+
+
+.auth-head{
+    box-shadow: -4px -4px 4px 0px rgba(0, 0, 0, 0.5);
+    background-color: #101010;
+    color: #999;
+    height: auto;
+    width: 70%;
+    text-align: center;
+    padding-top: 1px;
+    margin-top: 15%;
+    margin-left:15%;
+}
+
+#login_form {
+    display: none;
+}
+#tasks_form {
+    display: none;
+}
+#task_form {
+    /* width: 40%;
+    z-index: 3;
+    position: fixed;
+    margin: 0 auto; */
+    /* min-height: 90% !important;
+    height: 90%; */
+    display: none;
+}
+
+.navbar {
+    background: rgba(0, 0, 0, 0.5);
+}
+.navbar-brand {
+    background-image: url('/img/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 42px;
+    width: 250px;
+  }
+
+.solved_task {
+    background-color: #00ad7c;
+}
+
+footer {
+    height: 32px !important;
+    line-height: 32px;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    bottom: 0;
+  }
+
+footer a {
+    color: #aaa;
+}
