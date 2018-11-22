@@ -97,7 +97,7 @@ h4 {
 }
 
 .solved {
-    cursor: pointer;
+    cursor: default;
     opacity: 0.65;
 }
 /*

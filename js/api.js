@@ -37,25 +37,27 @@ $("#tasks-list").on('click', '.task', (event) => {
     return
   else
     $("#modal-container-41074").modal('show')
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    crossDomain: true,
-    url: HOST + "task.detail",
-    data: {guid: event.currentTarget.dataset.guid}
-  })
-  .done( data => {
-    $("#task-title").html(data.title);
-    $("#task-desc").html(urlify(data.description));
-    $("#task-tags").html("Tags: " + data.tags);
-    TASK = data.guid
-    renderTaskInput();
-    // if ( $('#task_form').css('display')=='none')
-    // {
-    //   $('#task_form').css({opacity: 0.0, display: "block"}).animate({opacity: 1.0}, 300);
-    //   $('#tasks_form').css({opacity: 0.0, display: "none"});
-    // }
-  })
+    let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
+    console.log(task)
+    $("#task-title").html(task.title)
+    $("#task-desc").html(urlify(task.description));
+    $("#task-tags").html("Tags: " + task.tags);
+    TASK = task.guid
+    renderTaskInput()
+  // $.ajax({
+  //   type: "GET",
+  //   dataType: "json",
+  //   crossDomain: true,
+  //   url: HOST + "task.detail",
+  //   data: {guid: event.currentTarget.dataset.guid}
+  // })
+  // .done( data => {
+  //   $("#task-title").html(data.title);
+  //   $("#task-desc").html(urlify(data.description));
+  //   $("#task-tags").html("Tags: " + data.tags);
+  //   TASK = data.guid
+  //   renderTaskInput()
+  // })
 })
 
 /* for rating showing */
@@ -79,6 +81,7 @@ function checkTask() {
     .done( data => {
       $('#task-flag').css({"color": "#257227"}).val(data.message)
       checkProfile()
+      $(".task[data-guid=" + TASK + "]").addClass("solved")
       setTimeout( () => {$('#modal-container-41074').modal('hide')}, 2000)
     })
     .fail( err => {
@@ -93,7 +96,7 @@ function checkTask() {
       }
     })
     .always( () => {
-      console.log("kek");
+      console.log("kek")
       
       setTimeout(renderTaskInput, 2000);
     })
@@ -119,6 +122,7 @@ function renderTags(tasks) {
   let tags = []
   tasks.map(el => tags.push(...el.tags.split(" ")))
   tags = [...new Set(tags)]
+  $.jStorage.set("tags", tags)
   for (i of tags) {
     $(sprintf(
       `<button data-tags="%s" type="button" class="btn btn-info">
@@ -130,7 +134,7 @@ function renderTags(tasks) {
     .show('fast')
   }
 }
-function loadTasks() {
+function loadTasks(method) {
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -139,12 +143,15 @@ function loadTasks() {
     data: {guid: CONTEST}
   })
   .done( data => {
-    renderTags(data.tasks)
-    $.each(data.tasks, ( index, value ) => {
-        renderTask(value)
-      // if(value.solved)
-      //   $("div").find("[task_id="+value.guid+"]").removeClass('shadow_task').addClass('solved_task') //.css('display','none')
-    })
+    $.jStorage.set("contest", data)
+    if (method == 0) {
+      renderTags(data.tasks)
+      $.each(data.tasks, ( index, value ) => {renderTask(value)})
+    } else {
+      $.each(data.tasks, ( index, value ) => {
+        $('.task[data-guid=' + value.guid + ']').addClass(value.solved == true ? "solved" : "")
+      })
+    }
   })
   .fail( err => {
     if(err.status == 401)
@@ -171,7 +178,7 @@ function checkProfile() {
     $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
     $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
     $("#profile-div").append(sprintf(t, "Position: " + data.position))
-    $("#profile-div").slideDown()
+    $("#profile-div").show() //.slideDown()
   })
   .fail( err => {
     if(err.status == 401)
@@ -186,9 +193,9 @@ function checkProfile() {
 function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
-    // $('#tasks-div').show()
+    $('#tasks-div').show()
     // $("#profile-div").show()
-    loadTasks()
+    loadTasks(0)
     // checkScore()
     checkProfile()
   }
@@ -273,6 +280,18 @@ $("#checkTask").on("submit", (event) => {
   checkTask();
 })
 
+function checkUpdates() {
+  loadTasks(1)
+}
 $( document ).ready( () => {
+  $.jStorage.flush()
   checkAuth()
+  setInterval(() => {
+    if(!Cookies.get('ctf'))
+      checkAuth()
+    else {
+      checkProfile()
+      loadTasks(1)
+    }
+  }, 10000)
 })
