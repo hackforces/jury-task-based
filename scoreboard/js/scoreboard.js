@@ -1,6 +1,5 @@
-var HOST = "https://api.hackforces.com/api/"
-var contest = 13;
-
+var HOST = "/api/"
+var contest = 2;
 function checkScore() {
   $.ajax({
     type: "GET",
@@ -28,14 +27,16 @@ function checkContest() {
     data: {guid: contest},
     success: function(data) {
         $("#date_end")
-        .countdown(new Date(parseInt(data.contest.date_end) * 1000), function(event) {
+        .countdown(new Date(parseInt(data.contest.date_end) * 1000))
+        .on('update.countdown', function(event) {
             $(this).text(event.strftime('%H:%M:%S'));
-        }); 
+        })
+
         $("#date_start")
-        .countdown(new Date(parseInt(data.contest.date_start) * 1000), {elapse:true}).on('update.countdown',
-	    function(event) {
-                $(this).text(event.strftime('%H:%M:%S'));
-            }); 
+        .countdown(new Date(parseInt(data.contest.date_start) * 1000), {elapse:true})
+        .on('update.countdown', function(event) {
+          $(this).text(event.strftime('%H:%M:%S'));
+        })
     },
   });
 }

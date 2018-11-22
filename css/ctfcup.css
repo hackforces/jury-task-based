@@ -71,6 +71,7 @@ main {
 
 .task {
     padding: 3px;
+    cursor: pointer;
 }
 .tasks {
     margin: 10px 0;
@@ -90,6 +91,14 @@ h4 {
 .d-inline {
     /* height: auto; */
     line-height: 40px;
+}
+#profile-div {
+    cursor: default;
+}
+
+.solved {
+    cursor: pointer;
+    opacity: 0.65;
 }
 /*
 #particles-js {

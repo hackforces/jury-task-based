@@ -41,9 +41,6 @@
               </form>
             </li>
             <li class="nav-item" id="profile-div" style="display: none;">
-                <div class="d-inline m-2 p-0 text-white">Tasks: 23/46</div>
-                <div class="d-inline m-2 p-0 text-white">Tries: 16</div>
-                <div class="d-inline m-2 p-0 bg-dark text-white">Position: 20</div>
             </li>
 						<!-- <li class="nav-item dropdown">
 							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
@@ -73,7 +70,15 @@
 							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
 						</div>
 						<div class="modal-body" id="task-desc"></div>
-						<div class="modal-footer"></div>
+						<div class="modal-body" id="task-tags"></div>
+						<div class="modal-footer" id="task-status">
+                <div class="input-group mb-3">
+                    <input id="task-flag" aria-label="flag here" aria-describedby="task-submission" type="text" placeholder="insert flag here" class="form-control" required>
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-info" type="button" id="task-submission" onclick="checkTask();">Go</button>
+                      </div>
+                  </div>
+            </div>
 					</div>
 				</div>
 			</div>
@@ -87,9 +92,9 @@
       <div class="container row p-0 m-0" id="tasks">
         <div class="col-md-3 p-0 m-0">
 
-            <div class="row m-1" id="task-search">
+            <!-- <div class="row m-1" id="task-search">
                 <input type="text" id="search" autocomplete="off">
-            </div>
+            </div> -->
             <div class="btn-group-vertical btn-block btn-sm m-1" style='text-align: left;' id="tags-div">
                 <button type="button" class="btn btn-info">#crypto <span class="badge badge-light">4</span></button>
                 <button type="button" class="btn btn-info">#crypto <span class="badge badge-light">4</span></button>
