@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var contest = 2;
+var contest = 1;
 function checkScore() {
   $.ajax({
     type: "GET",

@@ -1,6 +1,6 @@
 var HOST = "/api/"
-var CONTEST = 2;
-var TASK = 0;
+var CONTEST =  1
+var TASK = 0
 
 function urlify(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -31,33 +31,17 @@ function filter(e) {
 }
 
 $("#tasks-list").on('click', '.task', (event) => {
-  // $(event.target).html("")
   event.preventDefault()
   if($(event.currentTarget).hasClass("solved"))
     return
   else
     $("#modal-container-41074").modal('show')
     let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
-    console.log(task)
     $("#task-title").html(task.title)
-    $("#task-desc").html(urlify(task.description));
-    $("#task-tags").html("Tags: " + task.tags);
+    $("#task-desc").html(urlify(task.description))
+    $("#task-tags").html("Tags: " + task.tags)
     TASK = task.guid
     renderTaskInput()
-  // $.ajax({
-  //   type: "GET",
-  //   dataType: "json",
-  //   crossDomain: true,
-  //   url: HOST + "task.detail",
-  //   data: {guid: event.currentTarget.dataset.guid}
-  // })
-  // .done( data => {
-  //   $("#task-title").html(data.title);
-  //   $("#task-desc").html(urlify(data.description));
-  //   $("#task-tags").html("Tags: " + data.tags);
-  //   TASK = data.guid
-  //   renderTaskInput()
-  // })
 })
 
 /* for rating showing */
@@ -120,7 +104,7 @@ function renderTask(task) {
 
 function renderTags(tasks) {
   let tags = []
-  tasks.map(el => tags.push(...el.tags.split(" ")))
+  tasks.map(el => { if(el.tags) tags.push(...el.tags.split(" ")) })
   tags = [...new Set(tags)]
   $.jStorage.set("tags", tags)
   for (i of tags) {
@@ -144,6 +128,9 @@ function loadTasks(method) {
   })
   .done( data => {
     $.jStorage.set("contest", data)
+    // console.log(data)
+    if(!data.tasks)
+      $("#tasks-div").html("<h3>Tasks not available</h3>")
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
@@ -156,7 +143,7 @@ function loadTasks(method) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf');
+      Cookies.remove('ctf')
       checkAuth();
     }
   })
