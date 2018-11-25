@@ -44,3 +44,21 @@ function checkContest() {
 setInterval(function() { checkScore() }, 45000);
 checkScore();
 checkContest();
+$('html, body').scrollTop(0)
+
+function ar() {
+  setTimeout( () => {
+    console.log("kek 1")
+    $('html, body').animate({
+      scrollTop: $(window).height()
+    }, 8000)
+  }, 3000)
+  setTimeout( () => {
+    console.log("kek 2")
+    $('html, body').animate({
+      scrollTop: 0
+    }, 8000);
+  }, 11000)
+}
+ar();
+setInterval(ar, 19000)
