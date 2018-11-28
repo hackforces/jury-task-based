@@ -2,6 +2,12 @@ html, body {
   height: 100%;
 }
 
+#tasks-div {
+  height: 90%;
+  overflow: scroll;
+  padding-bottom: 60px;
+}
+
 /*
 rgba(51,204,153, 1) - салатовый
 rgba(23, 165, 137, 1) - зелёный 
