@@ -118,7 +118,7 @@ function renderTags(tasks) {
   for (i of tags) {
     $(sprintf(
       `<button data-tags="%s" type="button" class="btn btn-info">
-        #%s<span style="float: right;" class="badge badge-light">4</span>
+        #%s
       </button>`,
     i, i))
     .hide()
