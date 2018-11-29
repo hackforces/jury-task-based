@@ -107,6 +107,14 @@ function renderTags(tasks) {
   tasks.map(el => { if(el.tags) tags.push(...el.tags.split(" ")) })
   tags = [...new Set(tags)]
   $.jStorage.set("tags", tags)
+  $(sprintf(
+    `<button data-tags="%s" type="button" class="btn btn-info">
+      #%s
+    </button>`,
+  '', 'all'))
+    .hide()
+    .appendTo("#tags-div")
+    .show('fast')
   for (i of tags) {
     $(sprintf(
       `<button data-tags="%s" type="button" class="btn btn-info">

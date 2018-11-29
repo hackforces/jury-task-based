@@ -4,7 +4,8 @@ html, body {
 
 #tasks-div {
   height: 90%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding-bottom: 60px;
 }
 
