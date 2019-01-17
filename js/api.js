@@ -292,7 +292,6 @@ function checkInTeam() {
 }
 
 function addTeam(team) {
-  console.log(team)
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -314,16 +313,15 @@ function addTeam(team) {
   })
 }
 
-function joinTeam() {
+function joinTeam(team) {
   $.ajax({
     type: "POST",
     dataType: "json",
     crossDomain: true,
-    data: {contest_guid: CONTEST},
-    url: HOST + "user.joinContest"
+    data: {contest: CONTEST, invite_code: team.teamCode},
+    url: HOST + "team.join"
   })
   .done( data => {
-  //   console.log(data);
     if (data.status != true) {
       checkAuth()
     }
@@ -374,8 +372,7 @@ $("#team-add-form").on("submit", (event) => {
 
 $("#team-join-form").on("submit", (event) => {
   event.preventDefault()
-  $(this).serialize()
-  Auth($("#username").val(), $("#password").val())
+  joinTeam(formToJSON($("#team-join-form")))
 })
 
 $("#checkTask").on("submit", (event) => {
