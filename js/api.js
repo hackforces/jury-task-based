@@ -166,6 +166,30 @@ function loadTasks(method) {
   })
 }
 
+
+function getTeams() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "contest.scoreboard",
+    data: {guid: CONTEST}
+  })
+  .done( data => {
+    $("#teams-list").hide().html("")
+    for (let t of data.users)
+      $("#teams-list").append("<b>" + t.username + "</b><br>")
+    $("#teams-list").show() //.slideDown()
+  })
+  .fail( err => {
+    if(err.status == 401)
+    {
+      Cookies.remove('ctf');
+      checkAuth();
+    }
+  })
+}
+
 function checkProfile() {
   let t = `<div class="d-inline m-2 p-0 text-white">%s</div>`
   $.ajax({
@@ -198,16 +222,10 @@ function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
     $('#registration').show()
-    // $("#profile-div").show()
-    loadTasks(0)
-    // checkScore()
-    checkProfile()
     checkInTeam()
   }
   else {
-    $("#profile-div").hide()
     $('#registration').hide()
-    $("#task-div").hide()
     $('#login-div').show()
   }
 }
@@ -259,7 +277,6 @@ function checkInTeam() {
   })
   .done( data => {
     let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
-    console.log(data.mystatus)
     if (data.status != true) {
       checkAuth()
     }
@@ -375,9 +392,8 @@ $( document ).ready( () => {
   setInterval(() => {
     if(!Cookies.get('ctf'))
       checkAuth()
-    else {
-      checkProfile()
-      loadTasks(1)
-    }
+    // else {
+    //   checkInTeam()
+    // }
   }, 10000)
 })
