@@ -223,6 +223,7 @@ function checkAuth() {
     $("#login-div").hide()
     $('#registration').show()
     checkInTeam()
+    getTeams()
   }
   else {
     $('#registration').hide()
