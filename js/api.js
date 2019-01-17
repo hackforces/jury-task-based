@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  1
+var CONTEST =  2
 var TASK = 0
 
 function urlify(text) {
@@ -280,7 +280,7 @@ function checkInTeam() {
     if (data.status != true) {
       checkAuth()
     }
-    if (data.hasOwnProperty('mystatus')) {
+    if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0) {
       $("#team-add-form").hide()
       $("#team-join-form").hide()
       $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
