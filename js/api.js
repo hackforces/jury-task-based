@@ -4,9 +4,8 @@ var TASK = 0
 
 function urlify(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.replace(urlRegex, function(url) {
-        return '<a target="_blank" href="' + url + '">' + url.substring(url.lastIndexOf('/')+1) + '</a>';
-    })
+    let name = url.includes("/files/") ? url.substring(url.lastIndexOf('/')+1) : url
+    return '<a target="_blank" href="' + url + '">' + name + '</a>';
 }
 
 /* for task showing */
