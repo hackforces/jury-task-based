@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="css/innoctf.css" type="text/css" />
-  <title>Открытая Олимпиада Университета Иннополис. Личный отбор - 2018</title>
+  <title>Открытая Олимпиада Университета Иннополис. Командный отбор - 2019</title>
 </head>
 
 <body>
@@ -14,7 +14,6 @@
 	<div class="row">
 		<div class="col-md-12">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light static-top navbar-dark bg-dark">
-				 
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="navbar-toggler-icon"></span>
 				</button> <a class="navbar-brand" href="#"></a>
@@ -68,7 +67,39 @@
   <!-- END MODAL BODY -->
 
   <!-- CENTER BODY -->
-	<div class="row" id='tasks-div' style='display: none;'>
+  <div class="row" id="registration" style="display: none;">
+    <div class="col-md-4 offset-md-2">
+      <p><h6>Создание команды</h6></p>
+      <form id="team-add-form">
+        <div class="form-group">
+          <label for="teamName">Название команды</label>
+          <input type="text" class="form-control" name="name" aria-describedby="makeHelp" placeholder="Введите название команды">
+          <small id="makeHelp" class="form-text text-muted">Можно участвовать только в одной команде</small>
+        </div>
+        <div class="form-group">
+          <label for="teamName">Тэг команды</label>
+          <input type="text" class="form-control" name="tag" aria-describedby="makeHelp2" placeholder="Введите тэг команды">
+          <small id="makeHelp2" class="form-text text-muted">Для короткого отображения в рейтинге</small>
+        </div>
+        <button type="submit" class="btn btn-info">Создать</button>
+      </form>
+      <p></p>
+      <form id="team-join-form">
+        <div class="form-group">
+          <label for="teamName">Присоединиться к команде</label>
+          <input type="text" class="form-control" name="teamCode" aria-describedby="joinHelp" placeholder="Введите код присоединения">
+          <small id="joinHelp" class="form-text text-muted"></small>
+        </div>
+        <button type="submit" class="btn btn-info">Присоединиться</button>
+      </form>
+      <div id="team-info-div" style="display: none;">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <p><h6>Список команд</h6></p>
+    </div>
+  </div>
+	<!--<div class="row" id='tasks-div' style='display: none;'>
 		<div class="col-md-8 offset-md-2">
       <div class="container row p-0 m-0" id="tasks">
         <div class="col-md-3 p-0 m-0">
@@ -81,14 +112,16 @@
         </div>
       </div>
 		</div>
-	</div>
+  </div> 
+  -->
   <!-- END CENTER BODY -->
 </main>
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
-<script src="js/bootstrap.min.js"></script>
 <script src="js/js.cookie.js"></script>
 <script src="js/jstorage.min.js"></script>
 <script src="js/sprintf.js"></script>

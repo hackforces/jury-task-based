@@ -9,6 +9,15 @@ function urlify(text) {
     })
 }
 
+function formToJSON(form) {
+  let unindexed_array = form.serializeArray()
+  let indexed_array = {};
+
+  $.map(unindexed_array, function(n, i){
+    indexed_array[n['name']] = n['value'];
+  });
+  return indexed_array
+}
 /* for task showing */
 $(".solved_task").click(function(e) {
     e.preventDefault()
@@ -188,15 +197,16 @@ function checkProfile() {
 function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
-    $('#tasks-div').show()
+    $('#registration').show()
     // $("#profile-div").show()
     loadTasks(0)
     // checkScore()
     checkProfile()
+    checkInTeam()
   }
   else {
     $("#profile-div").hide()
-    $('#tasks-div').hide()
+    $('#registration').hide()
     $("#task-div").hide()
     $('#login-div').show()
   }
@@ -239,6 +249,76 @@ function Join() {
     alert("fail: " + err.responseJSON.message)
   })
 }
+
+function checkInTeam() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "contest.detail?guid=" + CONTEST
+  })
+  .done( data => {
+    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
+    console.log(data.mystatus)
+    if (data.status != true) {
+      checkAuth()
+    }
+    if (data.hasOwnProperty('mystatus')) {
+      $("#team-add-form").hide()
+      $("#team-join-form").hide()
+      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
+    }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function addTeam(team) {
+  console.log(team)
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    data: {name: team.name, tag: team.tag, country: "RU", contest: CONTEST},
+    url: HOST + "team.add"
+  })
+  .done( data => {
+  //   console.log(data);
+    if (data.status != true) {
+      checkAuth()
+    }
+    else {
+      checkInTeam()
+    }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function joinTeam() {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    data: {contest_guid: CONTEST},
+    url: HOST + "user.joinContest"
+  })
+  .done( data => {
+  //   console.log(data);
+    if (data.status != true) {
+      checkAuth()
+    }
+    else {
+      checkInTeam()
+    }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
 function Auth(user, pass) {
   $.ajax({
     type: "POST",
@@ -265,6 +345,17 @@ function renderTaskInput() {
 }
 
 $("#login-form").on("submit", (event) => {
+  event.preventDefault()
+  $(this).serialize()
+  Auth($("#username").val(), $("#password").val())
+})
+
+$("#team-add-form").on("submit", (event) => {
+  event.preventDefault()
+  addTeam(formToJSON($("#team-add-form")))
+})
+
+$("#team-join-form").on("submit", (event) => {
   event.preventDefault()
   $(this).serialize()
   Auth($("#username").val(), $("#password").val())
