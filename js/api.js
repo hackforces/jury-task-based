@@ -18,16 +18,10 @@ function formToJSON(form) {
   });
   return indexed_array
 }
-/* for task showing */
+
 $(".solved_task").click(function(e) {
     e.preventDefault()
 })
-
-
-// $("#search").keyup(function() {
-//   var selectSize = $(this).val();
-//   filter(selectSize);
-// });
 
 $("#tags-div").on('click', 'button', (event) => {
   filter(event.currentTarget.dataset.tags)
@@ -97,7 +91,6 @@ function checkTask() {
 }
 
 function renderTask(task) {
-  //  data-toggle="modal" href="#modal-container-41074" 
   let el = $(sprintf(`
     <div class="col-md-4 task" data-tags="%s" data-guid="%s">
       <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
@@ -135,6 +128,7 @@ function renderTags(tasks) {
     .show('fast')
   }
 }
+
 function loadTasks(method) {
   $.ajax({
     type: "GET",
@@ -166,7 +160,6 @@ function loadTasks(method) {
   })
 }
 
-
 function getTeams() {
   $.ajax({
     type: "GET",
@@ -178,7 +171,7 @@ function getTeams() {
   .done( data => {
     $("#teams-list").hide().html("")
     for (let t of data.users)
-      $("#teams-list").append("<b>" + t.username + "</b><br>")
+    $("#teams-list").append($("<b></b>").text(t.username)).append("<br>")
     $("#teams-list").show() //.slideDown()
   })
   .fail( err => {
@@ -411,8 +404,5 @@ $( document ).ready( () => {
   setInterval(() => {
     if(!Cookies.get('ctf'))
       checkAuth()
-    // else {
-    //   checkInTeam()
-    // }
   }, 10000)
 })
