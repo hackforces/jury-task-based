@@ -277,14 +277,18 @@ function checkInTeam() {
     url: HOST + "contest.detail?guid=" + CONTEST
   })
   .done( data => {
-    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
+    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p><p><button onclick='leaveTeam(%d);' class='btn btn-info'>Покинуть команду</button></p>"
     if (data.status != true) {
       checkAuth()
     }
     if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0) {
       $("#team-add-form").hide()
       $("#team-join-form").hide()
-      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
+      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code, data.mystatus.guid)).show()
+    } else {
+      $("#team-add-form").show()
+      $("#team-join-form").show()
+      $("#team-info-div").hide()
     }
   })
   .fail( err => {
@@ -329,6 +333,23 @@ function joinTeam(team) {
     else {
       checkInTeam()
     }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function leaveTeam(team) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    data: {team: team},
+    url: HOST + "team.leave"
+  })
+  .done( data => {
+    if (data.status != true) { checkAuth() }
+    else { checkInTeam() }
   })
   .fail( err => {
     alert("fail: " + err.responseJSON.message)
