@@ -30,7 +30,7 @@ function filter(e) {
   var regex = new RegExp('\\b\\w*' + e + '\\w*\\b');
   $('.task').hide().filter(function () {
       return regex.test($(this).data('tags'))
-  }).show();
+  }).show()
 }
 
 $("#tasks-list").on('click', '.task', (event) => {
@@ -232,14 +232,12 @@ function Register(user, pass1, pass2, email) {
     data: {email: email, password1: pass1, password2: pass2, username: user},
     url: HOST + "user.register"
   })
-  .done( data => {
-  //   console.log(data);
-    if (data.status == true) {
+  .done( (_data, _textStatus, _xhr) => {
       Auth(user, pass1)
-      setTimeout(Join, 1000)
-    }
+      setTimeout(Join, 1700)
   })
   .fail( err => {
+    checkAuth()
     alert("fail: " + err.responseJSON.message)
   })
 }
@@ -251,13 +249,31 @@ function Join() {
     data: {contest_guid: 1},
     url: HOST + "user.joinContest"
   })
-  .done( data => {
-  //   console.log(data);
-    if (data.status == true) {
-      checkAuth()
-    }
+  .done( (_data, _textStatus, _xhr) => {
+    checkInTeam()
   })
   .fail( err => {
+    checkAuth()
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function teamMembers(team) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "team.contestDetail?guid=" + team
+  })
+  .done( (data, _textStatus, _xhr) => {
+    let members = ""
+    for (i of data.members)
+      members += sprintf("<p><b>%s</b> (%s)</p>", i.username, i.email)
+    $("#team-info-div").append("<p>Члены команды:</p>" + members)
+
+  })
+  .fail( err => {
+    checkAuth()
     alert("fail: " + err.responseJSON.message)
   })
 }
@@ -269,82 +285,20 @@ function checkInTeam() {
     crossDomain: true,
     url: HOST + "contest.detail?guid=" + CONTEST
   })
-  .done( data => {
-    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p><p><button onclick='leaveTeam(%d);' class='btn btn-info'>Покинуть команду</button></p>"
-    if (data.status != true) {
-      checkAuth()
-    }
+  .done( (data, _textStatus, _xhr) => {
+    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
+    let members = ""
+    for (i of data.members)
+      members += sprintf("<p><b>%s</b>(%s)</p>", i.username, i.email)
     if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0) {
-      $("#team-add-form").hide()
-      $("#team-join-form").hide()
-      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code, data.mystatus.guid)).show()
+      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
+      teamMembers(data.mystatus.guid)
     } else {
-      $("#team-add-form").show()
-      $("#team-join-form").show()
       $("#team-info-div").hide()
     }
   })
   .fail( err => {
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
-function addTeam(team) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {name: team.name, tag: team.tag, country: "RU", contest: CONTEST},
-    url: HOST + "team.add"
-  })
-  .done( data => {
-  //   console.log(data);
-    if (data.status != true) {
-      checkAuth()
-    }
-    else {
-      checkInTeam()
-    }
-  })
-  .fail( err => {
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
-function joinTeam(team) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {contest: CONTEST, invite_code: team.teamCode},
-    url: HOST + "team.join"
-  })
-  .done( data => {
-    if (data.status != true) {
-      checkAuth()
-    }
-    else {
-      checkInTeam()
-    }
-  })
-  .fail( err => {
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
-function leaveTeam(team) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {team: team},
-    url: HOST + "team.leave"
-  })
-  .done( data => {
-    if (data.status != true) { checkAuth() }
-    else { checkInTeam() }
-  })
-  .fail( err => {
+    checkAuth()
     alert("fail: " + err.responseJSON.message)
   })
 }
@@ -357,14 +311,14 @@ function Auth(user, pass) {
     data: {username: user, password: pass},
     url: HOST + "user.getToken"
   })
-  .done( data => {
-    if (data.status == true) {
-      Cookies.set('ctf', data.token, { expires: 1 });
-      checkAuth();
-    }
+  .done( (data, textStatus, xhr) => {
+      if (xhr.status === 200) {
+        Cookies.set('ctf', data.token, { expires: 1 })
+        checkAuth()
+      }
   })
   .fail( err => {
-    alert("fail: " + err.responseJSON.message)
+    alert("Auth failed: " + err.responseJSON.message)
   })
 }
 
@@ -378,16 +332,6 @@ $("#login-form").on("submit", (event) => {
   event.preventDefault()
   $(this).serialize()
   Auth($("#username").val(), $("#password").val())
-})
-
-$("#team-add-form").on("submit", (event) => {
-  event.preventDefault()
-  addTeam(formToJSON($("#team-add-form")))
-})
-
-$("#team-join-form").on("submit", (event) => {
-  event.preventDefault()
-  joinTeam(formToJSON($("#team-join-form")))
 })
 
 $("#checkTask").on("submit", (event) => {
