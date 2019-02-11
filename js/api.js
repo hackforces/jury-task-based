@@ -287,9 +287,6 @@ function checkInTeam() {
   })
   .done( (data, _textStatus, _xhr) => {
     let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
-    let members = ""
-    for (i of data.members)
-      members += sprintf("<p><b>%s</b>(%s)</p>", i.username, i.email)
     if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0) {
       $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
       teamMembers(data.mystatus.guid)
