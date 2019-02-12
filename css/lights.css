@@ -1,0 +1,102 @@
+.led-red {
+  -webkit-animation: blinkRed 2s infinite;
+  -moz-animation: blinkRed 2s infinite;
+  -ms-animation: blinkRed 2s infinite;
+  -o-animation: blinkRed 2s infinite;
+  animation: blinkRed 2s infinite;
+}
+
+@-webkit-keyframes blinkRed {
+    from { color: #A00; }
+    20% { color: #F00; }
+    to { color: #A00; }
+}
+@-moz-keyframes blinkRed {
+    from { color: #A00; }
+    20% { color: #F00; }
+    to { color: #A00; }
+}
+@-ms-keyframes blinkRed {
+    from { color: #A00; }
+    20% { color: #F00; }
+    to { color: #A00; }
+}
+@-o-keyframes blinkRed {
+    from { color: #A00; }
+    20% { color: #F00; }
+    to { color: #A00; }
+}
+@keyframes blinkRed {
+    from { color: #A00; }
+    20% { color: #F00; }
+    to { color: #A00; }
+}
+
+.led-yellow {
+    -webkit-animation: blinkYellow 2s infinite;
+    -moz-animation: blinkYellow 2s infinite;
+    -ms-animation: blinkYellow 2s infinite;
+    -o-animation: blinkYellow 2s infinite;
+    animation: blinkYellow 2s infinite;
+  }
+  
+  @-webkit-keyframes blinkYellow {
+      from { color: #AA0; }
+      20% { color: #FF0; }
+      to { color: #AA0; }
+  }
+  @-moz-keyframes blinkYellow {
+      from { color: #AA0; }
+      20% { color: #FF0; }
+      to { color: #AA0; }
+  }
+  @-ms-keyframes blinkYellow {
+      from { color: #AA0; }
+      20% { color: #FF0; }
+      to { color: #AA0; }
+  }
+  @-o-keyframes blinkYellow {
+      from { color: #AA0; }
+      20% { color: #FF0; }
+      to { color: #AA0; }
+  }
+  @keyframes blinkYellow {
+      from { color: #AA0; }
+      20% { color: #FF0; }
+      to { color: #AA0; }
+  }
+  
+
+.led-green {
+    -webkit-animation: blinkGreen 2s infinite;
+    -moz-animation: blinkGreen 2s infinite;
+    -ms-animation: blinkGreen 2s infinite;
+    -o-animation: blinkGreen 2s infinite;
+    animation: blinkGreen 2s infinite;
+  }
+  
+  @-webkit-keyframes blinkGreen {
+      from { color: #0A0; }
+      20% { color: #0F0; }
+      to { color: #0A0; }
+  }
+  @-moz-keyframes blinkGreen {
+      from { color: #0A0; }
+      20% { color: #0F0; }
+      to { color: #0A0; }
+  }
+  @-ms-keyframes blinkGreen {
+      from { color: #0A0; }
+      20% { color: #0F0; }
+      to { color: #0A0; }
+  }
+  @-o-keyframes blinkGreen {
+      from { color: #0A0; }
+      20% { color: #0F0; }
+      to { color: #0A0; }
+  }
+  @keyframes blinkGreen {
+      from { color: #0A0; }
+      20% { color: #0F0; }
+      to { color: #0A0; }
+  }

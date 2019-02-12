@@ -1,51 +1,51 @@
 var HOST = "/api/"
-var CONTEST =  2
+var CONTEST =  1
 var TASK = 0
 
 function urlify(text) {
-    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    var urlRegex = /(https?:\/\/[^\s]+)/g
     return text.replace(urlRegex, function(url) {
-        return '<a target="_blank" href="' + url + '">' + url.substring(url.lastIndexOf('/')+1) + '</a>';
+        return '<a target="_blank" href="' + url + '">' + url.substring(url.lastIndexOf('/')+1) + '</a>'
     })
+}
+
+function timestamp() {
+  return parseInt(Math.trunc(new Date().getTime() / 1000), 10)
 }
 
 function formToJSON(form) {
   let unindexed_array = form.serializeArray()
-  let indexed_array = {};
-
+  let indexed_array = {}
   $.map(unindexed_array, function(n, i){
-    indexed_array[n['name']] = n['value'];
-  });
+    indexed_array[n['name']] = n['value']
+  })
   return indexed_array
 }
 
-$(".solved_task").click(function(e) {
-    e.preventDefault()
-})
-
-$("#tags-div").on('click', 'button', (event) => {
-  filter(event.currentTarget.dataset.tags)
-})
 function filter(e) {
-  var regex = new RegExp('\\b\\w*' + e + '\\w*\\b');
+  var regex = new RegExp('\\b\\w*' + e + '\\w*\\b')
   $('.task').hide().filter(function () {
       return regex.test($(this).data('tags'))
   }).show()
 }
 
-$("#tasks-list").on('click', '.task', (event) => {
-  event.preventDefault()
-  if($(event.currentTarget).hasClass("solved"))
-    return
-  else
-    $("#modal-container-41074").modal('show')
-    let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
-    $("#task-title").html(task.title)
-    $("#task-desc").html(urlify(task.description))
-    $("#task-tags").html("Tags: " + task.tags)
-    TASK = task.guid
-    renderTaskInput()
-})
+function renderTaskStatus(task) {
+  let t = timestamp()
+  let _t = parseInt(task.last_seen, 10)
+  let code = ""
+  let out = ""
+  if (task.task_flags === (task.task_flags | 32) || t - _t > 600) {
+    out = "Задача недоступна, проверена %s"
+    code = "red"
+  } else if (task.task_flags === (task.task_flags | 128) || t - _t > 300) {
+    out = "Задача болеет, проверена %s"
+    code = "yellow"
+  } else {//if (task.task_flags === (task.task_flags | 64) || t - _t > 150) {
+    out = "Задача исправна, проверена %s"
+    code = "green"
+  }
+  return [code, sprintf(out, moment.unix(_t).fromNow())]
+}
 
 /* for rating showing */
 function checkTask() {
@@ -74,8 +74,8 @@ function checkTask() {
     .fail( err => {
       if(err.status == 401)
       {
-        Cookies.remove('ctf');
-        checkAuth();
+        Cookies.remove('ctf')
+        checkAuth()
       }
       if(err.status < 500)
       {
@@ -83,22 +83,24 @@ function checkTask() {
       }
     })
     .always( () => {
-      console.log("kek")
-      
-      setTimeout(renderTaskInput, 2000);
+      setTimeout(renderTaskInput, 2000)
     })
   }
 }
 
 function renderTask(task) {
+  [a, b] = renderTaskStatus(task)
   let el = $(sprintf(`
     <div class="col-md-4 task" data-tags="%s" data-guid="%s">
       <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-        <div class="card-header"><i class="fas fa-coins"></i> %s <span class='float-right'><i class="fas fa-power-off"></i></span></div>
+        <div class="card-header">
+          <span data-toggle="tooltip" data-placement="top" title="Стоимость"><i class="fas fa-coins"></i> %s </span>
+          <span class='float-right led-%s' last-seen=%s data-toggle="tooltip" data-placement="top" title="%s"><i class="fas fa-power-off"></i></span>
+        </div>
         <div class="card-body"><h5 class="card-title">%s</h5></div>
       </div>
     </div>
-  `, task.tags, task.guid, task.points, task.title)).hide()
+  `, task.tags, task.guid, task.points, a, task.last_seen, b, task.title)).hide()
   if (task.solved == true)
     el.addClass("solved")
   el.appendTo($("#tasks-list")).show('slow')
@@ -108,28 +110,19 @@ function renderTags(tasks) {
   let tags = []
   tasks.map(el => { if(el.tags) tags.push(...el.tags.split(" ")) })
   tags = [...new Set(tags)]
+  tags.unshift('')
   $.jStorage.set("tags", tags)
-  $(sprintf(
-    `<button data-tags="%s" type="button" class="btn btn-info">
-      #%s
-    </button>`,
-  '', 'all'))
-    .hide()
-    .appendTo("#tags-div")
-    .show('fast')
   for (i of tags) {
+    k = i === '' ? 'all' : i
     $(sprintf(
-      `<button data-tags="%s" type="button" class="btn btn-info">
-        #%s
-      </button>`,
-    i, i))
+      `<button data-tags="%s" type="button" class="btn shadow-none btn-info"> # %s</button>`,i, k))
     .hide()
     .appendTo("#tags-div")
     .show('fast')
   }
 }
 
-function loadTasks(method) {
+function loadTasks(method = 0) {
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -139,15 +132,21 @@ function loadTasks(method) {
   })
   .done( data => {
     $.jStorage.set("contest", data)
-    // console.log(data)
     if(!data.tasks)
       $("#tasks-div").html("<h3>Tasks not available</h3>")
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
+      $(function () { $('span[data-toggle="tooltip"]').tooltip() })
     } else {
       $.each(data.tasks, ( index, value ) => {
-        $('.task[data-guid=' + value.guid + ']').addClass(value.solved == true ? "solved" : "")
+        [a, b] = renderTaskStatus(value)
+        $('.task[data-guid=' + value.guid + ']')
+        .addClass(value.solved == true ? "solved" : "")
+        let stat = $('.task[data-guid=' + value.guid + '] .card .card-header .float-right')
+        stat.attr('last-seen', value.last_seen)
+        .attr('data-original-title', b)
+        .removeClass("led-red led-yellow led-green").addClass("led-"+a)
       })
     }
   })
@@ -155,34 +154,10 @@ function loadTasks(method) {
     if(err.status == 401)
     {
       Cookies.remove('ctf')
-      checkAuth();
+      checkAuth()
     }
   })
 }
-
-function getTeams() {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    crossDomain: true,
-    url: HOST + "contest.scoreboard",
-    data: {guid: CONTEST}
-  })
-  .done( data => {
-    $("#teams-list").hide().html("")
-    for (let t of data.users)
-    $("#teams-list").append($("<b></b>").text(t.username)).append("<br>")
-    $("#teams-list").show() //.slideDown()
-  })
-  .fail( err => {
-    if(err.status == 401)
-    {
-      Cookies.remove('ctf');
-      checkAuth();
-    }
-  })
-}
-
 function checkProfile() {
   let t = `<div class="d-inline m-2 p-0 text-white">%s</div>`
   $.ajax({
@@ -199,107 +174,26 @@ function checkProfile() {
     $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
     $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
     $("#profile-div").append(sprintf(t, "Position: " + data.position))
-    $("#profile-div").show() //.slideDown()
+    $("#profile-div").show()
   })
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf');
-      checkAuth();
+      Cookies.remove('ctf')
+      checkAuth()
     }
   })
 }
-
-/* authorization */
 function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
     $('#registration').show()
-    checkInTeam()
-    getTeams()
   }
   else {
     $('#registration').hide()
     $('#login-div').show()
   }
 }
-
-function Register(user, pass1, pass2, email) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {email: email, password1: pass1, password2: pass2, username: user},
-    url: HOST + "user.register"
-  })
-  .done( (_data, _textStatus, _xhr) => {
-      Auth(user, pass1)
-      setTimeout(Join, 1700)
-  })
-  .fail( err => {
-    checkAuth()
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-function Join() {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {contest_guid: 1},
-    url: HOST + "user.joinContest"
-  })
-  .done( (_data, _textStatus, _xhr) => {
-    checkInTeam()
-  })
-  .fail( err => {
-    checkAuth()
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
-function teamMembers(team) {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    crossDomain: true,
-    url: HOST + "team.contestDetail?guid=" + team
-  })
-  .done( (data, _textStatus, _xhr) => {
-    let members = ""
-    for (i of data.members)
-      members += sprintf("<p><b>%s</b> (%s)</p>", i.username, i.email)
-    $("#team-info-div").append("<p>Члены команды:</p>" + members)
-
-  })
-  .fail( err => {
-    checkAuth()
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
-function checkInTeam() {
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    crossDomain: true,
-    url: HOST + "contest.detail?guid=" + CONTEST
-  })
-  .done( (data, _textStatus, _xhr) => {
-    let mydiv = "<p>Команда <b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p>"
-    if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0) {
-      $("#team-info-div").html(sprintf(mydiv, data.mystatus.name, data.mystatus.tag, data.mystatus.invite_code)).show()
-      teamMembers(data.mystatus.guid)
-    } else {
-      $("#team-info-div").hide()
-    }
-  })
-  .fail( err => {
-    checkAuth()
-    alert("fail: " + err.responseJSON.message)
-  })
-}
-
 function Auth(user, pass) {
   $.ajax({
     type: "POST",
@@ -318,7 +212,6 @@ function Auth(user, pass) {
     alert("Auth failed: " + err.responseJSON.message)
   })
 }
-
 function renderTaskInput() {
     $("#task-flag").val("").attr('style', '')
     $("#task-submission").prop("disabled", false)
@@ -330,20 +223,39 @@ $("#login-form").on("submit", (event) => {
   $(this).serialize()
   Auth($("#username").val(), $("#password").val())
 })
-
 $("#checkTask").on("submit", (event) => {
   event.preventDefault()
-  checkTask();
+  checkTask()
+})
+$(".solved_task").click(function(e) {
+  e.preventDefault()
+})
+$("#tags-div").on('click', 'button', (event) => {
+  filter(event.currentTarget.dataset.tags)
+  $("button").removeClass('active')
+  $(event.currentTarget).addClass('active')
+})
+$("#tasks-list").on('click', '.task', (event) => {
+event.preventDefault()
+if($(event.currentTarget).hasClass("solved"))
+  return
+else
+  $("#modal-container-41074").modal('show')
+  let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
+  $("#task-title").html(task.title)
+  $("#task-desc").html(urlify(task.description))
+  $("#task-tags").html("Tags: " + task.tags)
+  TASK = task.guid
+  renderTaskInput()
 })
 
-function checkUpdates() {
-  loadTasks(1)
-}
 $( document ).ready( () => {
   $.jStorage.flush()
   checkAuth()
+  loadTasks(0)
   setInterval(() => {
     if(!Cookies.get('ctf'))
       checkAuth()
+      loadTasks(1)
   }, 10000)
 })
