@@ -29,6 +29,21 @@ function filter(e) {
   }).show()
 }
 
+getUrlParameter = (sParam) => {
+  var sPageURL = window.location.search.substring(1),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+      }
+  }
+}
+
 function renderTaskStatus(task) {
   let t = timestamp()
   let _t = parseInt(task.last_seen, 10)
@@ -94,7 +109,7 @@ function renderTask(task) {
     <div class="col-md-4 task" data-tags="%s" data-guid="%s">
       <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
         <div class="card-header">
-          <span data-toggle="tooltip" data-placement="top" title="Стоимость"><i class="fas fa-coins"></i> %s </span>
+          <span data-toggle="tooltip" data-placement="top" title="Стоимость"><i style='color: #ffd700;' class="fas fa-coins"></i> %s </span>
           <span class='float-right led-%s' last-seen=%s data-toggle="tooltip" data-placement="top" title="%s"><i class="fas fa-power-off"></i></span>
         </div>
         <div class="card-body"><h5 class="card-title">%s</h5></div>
@@ -188,9 +203,12 @@ function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
     $('#registration').show()
+    $('#tasks-div').show()
+    loadTasks(0)
   }
   else {
     $('#registration').hide()
+    $('#tasks-div').hide()
     $('#login-div').show()
   }
 }
@@ -204,7 +222,7 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200) {
-        Cookies.set('ctf', data.token, { expires: 1 })
+        Cookies.set('ctf', data.token, { expires: 7, domain: '.olymp.hackforces.com', secure: true })
         checkAuth()
       }
   })
@@ -212,6 +230,24 @@ function Auth(user, pass) {
     alert("Auth failed: " + err.responseJSON.message)
   })
 }
+
+function sendToken() {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    data: {email: $("#reset-email").val()},
+    url: HOST + "user.sendToken"
+  })
+  .done( (data, textStatus, xhr) => {
+    alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже)")
+  })
+  .fail( err => {
+    alert("Ошибка отправки письма: " + err.responseJSON.message)
+  })
+}
+
+
 function renderTaskInput() {
     $("#task-flag").val("").attr('style', '')
     $("#task-submission").prop("disabled", false)
@@ -249,13 +285,17 @@ else
   renderTaskInput()
 })
 
+if (getUrlParameter('reset')) {
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.olymp.hackforces.com', secure: true })
+}
+
 $( document ).ready( () => {
   $.jStorage.flush()
   checkAuth()
-  loadTasks(0)
   setInterval(() => {
     if(!Cookies.get('ctf'))
       checkAuth()
+    else
       loadTasks(1)
   }, 10000)
 })

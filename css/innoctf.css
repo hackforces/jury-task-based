@@ -135,3 +135,15 @@ h5 {
     font-weight: 650;
     padding: 0.4rem 0.4rem;
 }
+
+#tags-div {
+    padding: 0;
+    min-height: 100%;
+    margin-top: 7px !important;
+    background-color: rgba(88, 95, 105, 0.9) !important;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    /* border: 1px solid #000000; */
+}
+.col-md-3 {
+    padding-right: 15px !important;
+}

@@ -3,11 +3,25 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta name="yandex-verification" content="157176110c6e1b8b" />
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/innoctf.css" type="text/css" />
   <link rel="stylesheet" href="css/lights.css" type="text/css" />
   <title>Открытая Олимпиада Университета Иннополис. Командный отбор - 2019</title>
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym")
+    ym(52392991, "init", {
+         id:52392991,
+         clickmap:true,
+         trackLinks:true,
+         accurateTrackBounce:true,
+         webvisor:true
+    })
+ </script>
+ <noscript><div><img src="https://mc.yandex.ru/watch/52392991" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </head>
 
 <body>
@@ -40,7 +54,7 @@
 		</div>
   </div>
   
-  <!-- MODAL BODY -->
+  <!-- MODAL TASK BODY -->
 	<div class="row">
 		<div class="col-md-12">			
 			<div class="modal fade" id="modal-container-41074" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,8 +79,34 @@
 			</div>
 		</div>
   </div>
-  <!-- END MODAL BODY -->
-  <!-- <div class="led-yellow" style="width: 50px; height: 50px;"></div> -->
+  <!-- END MODAL TASK BODY -->
+  
+  <!-- MODAL RESET PASSWORD BODY -->
+	<div class="row">
+		<div class="col-md-12">			
+			<div class="modal fade" id="resetPass" role="dialog" aria-labelledby="resetPass" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Восстановить доступ</h5>
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+						</div>
+            <div class="modal-body">Чтобы восстановить доступ, просто введите свой e-mail. Ссылка для входа на сайт будет у Вас на почте</div>
+            <div class="modal-footer">
+              <div class="input-group mb-3">
+                <input id="reset-email" aria-label="email here" aria-describedby="reset-submission" type="text" placeholder="Введите e-mail" class="form-control" required>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary btn-info" type="button" id="reset-submission" onclick="sendToken();">SEND</button>
+                </div>
+              </div>
+            </div>
+					</div>
+				</div>
+			</div>
+		</div>
+  </div>
+  <!-- END RESET PASSWORD BODY -->
+
   <!-- CENTER BODY -->
 	<div class="row" id='tasks-div'>
 		<div class="col-md-8 offset-md-2">
@@ -87,9 +127,9 @@
 </main>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ru.js"></script>
