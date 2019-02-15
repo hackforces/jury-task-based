@@ -78,7 +78,7 @@ function checkTask() {
           contest_guid: CONTEST,
           flag: $("#task-flag").val()
         },
-      url: HOST + "user.checkTask"
+      url: HOST + "task.check"
     })
     .done( data => {
       $('#task-flag').css({"color": "#257227"}).val(data.message)
@@ -125,6 +125,8 @@ function renderTags(tasks) {
   let tags = []
   tasks.map(el => { if(el.tags) tags.push(...el.tags.split(" ")) })
   tags = [...new Set(tags)]
+  if (tags.length === 0)
+    return
   tags.unshift('')
   $.jStorage.set("tags", tags)
   for (i of tags) {
@@ -148,7 +150,7 @@ function loadTasks(method = 0) {
   .done( data => {
     $.jStorage.set("contest", data)
     if(!data.tasks)
-      $("#tasks-div").html("<h3>Tasks not available</h3>")
+      $("#tasks-div").html("<h3>Задания недоступны</h3>")
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
@@ -282,7 +284,7 @@ $("#tasks-list").on('click', '.task', (event) => {
     let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
     $("#task-title").html(task.title)
     $("#task-desc").html(urlify(task.description))
-    $("#task-tags").html("Tags: " + task.tags)
+    $("#task-tags").html("<b>Тэги:</b> " + task.tags.split(" ").map(e => '<span class="badge badge-pill badge-secondary">' + e + '</span>').join(" "))
     TASK = task.guid
     renderTaskInput()
   }

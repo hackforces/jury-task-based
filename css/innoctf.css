@@ -132,8 +132,10 @@ h5 {
 }
 
 .badge {
-    font-weight: 650;
-    padding: 0.4rem 0.4rem;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 0.3rem 0.3rem;
+    cursor: default;
 }
 
 #tags-div {
