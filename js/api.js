@@ -242,7 +242,7 @@ function sendToken() {
     url: HOST + "user.sendToken"
   })
   .done( (data, textStatus, xhr) => {
-    alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже)")
+    alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже) - отправитель no-reply@hackforces.com")
     $("#resetPass").modal('hide')
   })
   .fail( err => {
