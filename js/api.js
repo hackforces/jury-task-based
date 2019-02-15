@@ -202,6 +202,7 @@ function checkProfile() {
 function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
+    $("#reset-div").hide()
     $('#registration').show()
     $('#tasks-div').show()
     loadTasks(0)
@@ -210,6 +211,7 @@ function checkAuth() {
     $('#registration').hide()
     $('#tasks-div').hide()
     $('#login-div').show()
+    $("#reset-div").show()
   }
 }
 function Auth(user, pass) {
@@ -241,12 +243,12 @@ function sendToken() {
   })
   .done( (data, textStatus, xhr) => {
     alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже)")
+    $("#resetPass").modal('hide')
   })
   .fail( err => {
     alert("Ошибка отправки письма: " + err.responseJSON.message)
   })
 }
-
 
 function renderTaskInput() {
     $("#task-flag").val("").attr('style', '')
@@ -272,23 +274,22 @@ $("#tags-div").on('click', 'button', (event) => {
   $(event.currentTarget).addClass('active')
 })
 $("#tasks-list").on('click', '.task', (event) => {
-event.preventDefault()
-if($(event.currentTarget).hasClass("solved"))
-  return
-else
-  $("#modal-container-41074").modal('show')
-  let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
-  $("#task-title").html(task.title)
-  $("#task-desc").html(urlify(task.description))
-  $("#task-tags").html("Tags: " + task.tags)
-  TASK = task.guid
-  renderTaskInput()
+  event.preventDefault()
+  if($(event.currentTarget).hasClass("solved"))
+    return
+  else {
+    $("#modal-container-41074").modal('show')
+    let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
+    $("#task-title").html(task.title)
+    $("#task-desc").html(urlify(task.description))
+    $("#task-tags").html("Tags: " + task.tags)
+    TASK = task.guid
+    renderTaskInput()
+  }
 })
-
 if (getUrlParameter('reset')) {
   Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.olymp.hackforces.com', secure: true })
 }
-
 $( document ).ready( () => {
   $.jStorage.flush()
   checkAuth()
