@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  1
+var CONTEST =  2
 var TASK = 0
 
 function urlify(text) {
@@ -187,10 +187,7 @@ function checkProfile() {
   .done( data => {
     $("#profile-div").hide().html("")
     $("#profile-div").append(sprintf(t, data.username)).animate('slow')
-    $("#profile-div").append(sprintf(t, "Points: " + data.points))
-    $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
-    $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
-    $("#profile-div").append(sprintf(t, "Position: " + data.position))
+    $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf'))).animate('slow')
     $("#profile-div").show()
   })
   .fail( err => {
@@ -208,10 +205,12 @@ function checkAuth() {
     $('#registration').show()
     $('#tasks-div').show()
     loadTasks(0)
+    checkProfile()
   }
   else {
     $('#registration').hide()
     $('#tasks-div').hide()
+    $('#profile-div').hide()
     $('#login-div').show()
     $("#reset-div").show()
   }

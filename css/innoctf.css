@@ -1,7 +1,6 @@
 html, body {
   height: 100%;
 }
-
 #tasks-div {
   height: 90%;
   overflow-y: scroll;
@@ -27,7 +26,7 @@ rgba(60, 4, 88, 1) - фиолетовый
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    width: 250px;
+    width: 180px;
 }
 #username, #password {
     padding: 0.18rem;
@@ -65,9 +64,9 @@ main {
     display: block;
   }
 
-  .bg-dark {
-      background-color: rgba(88, 95, 105, 0.9) !important; 
-  }
+.bg-dark {
+    background-color: rgba(128, 188, 0, 0.9) !important; 
+}
 #tasks {
     margin-top: 60px !important;
 }
