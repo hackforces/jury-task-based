@@ -150,7 +150,7 @@ function loadTasks(method = 0) {
   .done( data => {
     $.jStorage.set("contest", data)
     if(data.tasks.length == 0)
-      $("#tasks-div").html("<h3>Задания недоступны</h3>")
+      $("#tasks-div").html("<div class='container'><h3 class='display-2 text-center'>Задания недоступны</h3></div>")
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
