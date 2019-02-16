@@ -204,6 +204,7 @@ function checkAuth() {
     $("#reset-div").hide()
     $('#registration').show()
     $('#tasks-div').show()
+    $('#rules-div').hide()
     loadTasks(0)
     checkProfile()
   }
@@ -213,6 +214,7 @@ function checkAuth() {
     $('#profile-div').hide()
     $('#login-div').show()
     $("#reset-div").show()
+    $('#rules-div').show()
   }
 }
 function Auth(user, pass) {
