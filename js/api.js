@@ -89,7 +89,7 @@ function checkTask() {
     .fail( err => {
       if(err.status == 401)
       {
-        Cookies.remove('ctf')
+        Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
         checkAuth()
       }
       if(err.status < 500)
@@ -170,7 +170,7 @@ function loadTasks(method = 0) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf')
+      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
       checkAuth()
     }
   })
@@ -193,7 +193,7 @@ function checkProfile() {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf')
+      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
       checkAuth()
     }
   })
