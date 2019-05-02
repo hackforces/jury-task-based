@@ -55,7 +55,7 @@ footer {
 main {
     position: relative;
     width: 100%;
-    height: 100%;
+/*    height: 100%; */
     /* background-image: url('/img/background.png'); */
     background-repeat: no-repeat;
     background-position-x: 98%;

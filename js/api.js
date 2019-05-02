@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  2
+var CONTEST =  3
 var TASK = 0
 
 function urlify(text) {
@@ -185,10 +185,12 @@ function checkProfile() {
     data: {contest: CONTEST}
   })
   .done( data => {
-    $("#profile-div").hide().html("")
-    $("#profile-div").append(sprintf(t, data.username)).animate('slow')
-    $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf'))).animate('slow')
+    setTimeout( () => {
+    // $("#profile-div").hide().html("")
+    $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
+    $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf'))) //.animate('slow')
     $("#profile-div").show()
+   }, 1000);
   })
   .fail( err => {
     if(err.status == 401)
