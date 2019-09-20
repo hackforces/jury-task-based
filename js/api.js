@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  1
+var CONTEST =  3
 var TASK = 0
 var converter = new showdown.Converter();
 converter.setOption('simplifiedAutoLink', true);
@@ -96,7 +96,7 @@ function checkTask() {
     .fail( err => {
       if(err.status == 401)
       {
-        Cookies.remove('ctf')
+        Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
         checkAuth()
       }
       if(err.status < 500)
@@ -132,6 +132,8 @@ function renderTags(tasks) {
   let tags = []
   tasks.map(el => { if(el.tags) tags.push(...el.tags.split(" ")) })
   tags = [...new Set(tags)]
+  if (tags.length === 0)
+    return
   tags.unshift('')
   $.jStorage.set("tags", tags)
   for (i of tags) {
@@ -154,8 +156,8 @@ function loadTasks(method = 0) {
   })
   .done( data => {
     $.jStorage.set("contest", data)
-    if(!data.tasks)
-      $("#tasks-div").html("<h3>Tasks not available</h3>")
+    if(data.tasks.length == 0)
+      $("#tasks-div").html("<div class='container'><h3 class='display-2 text-center'>Задания недоступны</h3></div>")
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
@@ -175,7 +177,7 @@ function loadTasks(method = 0) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf')
+      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
       checkAuth()
     }
   })
@@ -203,7 +205,7 @@ function checkProfile() {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf')
+      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
       checkAuth()
     }
   })
@@ -211,15 +213,20 @@ function checkProfile() {
 function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
+    $("#reset-div").hide()
     $('#registration').show()
     $('#tasks-div').show()
+    $('#rules-div').hide()
     loadTasks(0)
     checkProfile()
   }
   else {
     $('#registration').hide()
     $('#tasks-div').hide()
+    $('#profile-div').hide()
     $('#login-div').show()
+    $("#reset-div").show()
+    $('#rules-div').show()
   }
 }
 function Auth(user, pass) {
@@ -251,13 +258,13 @@ function sendToken() {
     url: HOST + "user.sendToken"
   })
   .done( (data, textStatus, xhr) => {
-    alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже)")
+    alert("Письмо на адрес " + $("#reset-email").val() + " было успешно отправлено! Проверьте почту (папку СПАМ тоже) - отправитель no-reply@hackforces.com")
+    $("#resetPass").modal('hide')
   })
   .fail( err => {
     alert("Ошибка отправки письма: " + err.responseJSON.message)
   })
 }
-
 
 function renderTaskInput() {
     $("#task-flag").val("").attr('style', '')
@@ -302,11 +309,9 @@ else
     $('#task-submission').prop("disabled", true)
   }
 })
-
 if (getUrlParameter('reset')) {
   Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.ctf.hackforces.com', secure: true })
 }
-
 $( document ).ready( () => {
   $.jStorage.flush()
   checkAuth()
