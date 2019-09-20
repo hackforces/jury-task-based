@@ -221,8 +221,9 @@ function Auth(user, pass) {
     url: HOST + "user.getToken"
   })
   .done( (data, textStatus, xhr) => {
+      console.log(xhr)
       if (xhr.status === 200) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: '.olymp.hackforces.com', secure: true })
+        Cookies.set('ctf', data.token, { expires: 7, domain: '.ctf.hackforces.com', secure: true })
         checkAuth()
       }
   })
@@ -286,7 +287,7 @@ else
 })
 
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.olymp.hackforces.com', secure: true })
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.ctf.hackforces.com', secure: true })
 }
 
 $( document ).ready( () => {
