@@ -1,6 +1,9 @@
 var HOST = "/api/"
 var CONTEST =  3
 var TASK = 0
+var converter = new showdown.Converter();
+converter.setOption('simplifiedAutoLink', true);
+moment.updateLocale('ru');
 
 function urlify(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g
@@ -42,6 +45,10 @@ getUrlParameter = (sParam) => {
           return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
       }
   }
+}
+
+function checkBits(v, b) {
+  return v === (v | b)
 }
 
 function renderTaskStatus(task) {
@@ -186,11 +193,14 @@ function checkProfile() {
   })
   .done( data => {
     setTimeout( () => {
+      $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
+      $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
+      $("#profile-div").append(sprintf(t, "Points: " + data.points))
+      $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
+      $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
+      $("#profile-div").append(sprintf(t, "Position: " + data.position))
+    }, 1000)
     // $("#profile-div").hide().html("")
-    $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
-    $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf'))) //.animate('slow')
-    $("#profile-div").show()
-   }, 1000);
   })
   .fail( err => {
     if(err.status == 401)
@@ -228,8 +238,9 @@ function Auth(user, pass) {
     url: HOST + "user.getToken"
   })
   .done( (data, textStatus, xhr) => {
+      console.log(xhr)
       if (xhr.status === 200) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: '.olymp.hackforces.com', secure: true })
+        Cookies.set('ctf', data.token, { expires: 7, domain: '.ctf.hackforces.com', secure: true })
         checkAuth()
       }
   })
@@ -279,21 +290,27 @@ $("#tags-div").on('click', 'button', (event) => {
   $(event.currentTarget).addClass('active')
 })
 $("#tasks-list").on('click', '.task', (event) => {
-  event.preventDefault()
-  if($(event.currentTarget).hasClass("solved"))
-    return
-  else {
-    $("#modal-container-41074").modal('show')
-    let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
-    $("#task-title").html(task.title)
-    $("#task-desc").html(urlify(task.description))
-    $("#task-tags").html("<b>Тэги:</b> " + task.tags.split(" ").map(e => '<span class="badge badge-pill badge-secondary">' + e + '</span>').join(" "))
-    TASK = task.guid
-    renderTaskInput()
+event.preventDefault()
+if($(event.currentTarget).hasClass("solved"))
+  return
+else
+  $("#modal-container-41074").modal('show')
+  let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
+  $("#task-title").html(task.title)
+  // $("#task-desc").html(urlify(task.description))
+  $("#task-desc").html(converter.makeHtml(task.description))
+  $("#task-tags").html(task.tags.split(',').map((el) => `<h5><span class="badge badge-pill badge-secondary">${el}</span></h5>`).join(" "))
+  TASK = task.guid
+  renderTaskInput()
+  console.log(task.task_flags)
+  if (checkBits(task.task_flags, 16)) {
+    $('#task-flag').prop("disabled", true)
+    $('#task-flag').val("Это автозачитываемый таск. Вам не нужно вводить флаги")
+    $('#task-submission').prop("disabled", true)
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.olymp.hackforces.com', secure: true })
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.ctf.hackforces.com', secure: true })
 }
 $( document ).ready( () => {
   $.jStorage.flush()
