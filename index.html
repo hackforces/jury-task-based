@@ -34,6 +34,7 @@
 				</button> <a class="navbar-brand" href="#"></a>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="navbar-nav ml-md-auto">
+            <li class="nav-item" id="reset-div" style="display: none;"><button class="btn btn-info mb-2" data-toggle="modal" data-target="#resetPass">Забыл пароль</button>&nbsp;&nbsp;</li>
             <li class="nav-item" id="login-div" style="display: none;">
               <form class="form-inline" id="login-form">
                 <div class="form-group mb-3">
@@ -91,7 +92,7 @@
 							<h5 class="modal-title">Восстановить доступ</h5>
 							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
 						</div>
-            <div class="modal-body">Чтобы восстановить доступ, просто введите свой e-mail. Ссылка для входа на сайт будет у Вас на почте</div>
+            <div class="modal-body">Чтобы восстановить доступ, просто введите свой e-mail. Ссылка для входа на сайт будет у Вас на почте (с адреса <b>no-reply@hackforces.com</b>). <p>ВНИМАНИЕ! При запросе доступа у вас автоматически активируется время турнира!</p></div>
             <div class="modal-footer">
               <div class="input-group mb-3">
                 <input id="reset-email" aria-label="email here" aria-describedby="reset-submission" type="text" placeholder="Введите e-mail" class="form-control" required>
@@ -106,7 +107,35 @@
 		</div>
   </div>
   <!-- END RESET PASSWORD BODY -->
-
+  <!-- RULES DIV -->
+  <div class="container" id="rules-div" style="padding-top: 30px;">
+    <h3 class='display=3'>Добро пожаловать на финальный очный тур Открытой Олимпиады Университета Иннополис по информационной безопасности!</h3>
+    <p>Тур длится с 9:00 28 марта по 18:00 28 марта <b>(время Московское)</b></p>
+    <p>На решение заданий отводится 8 часов, которые начинаются сразу после авторизации или запросе токена авторизации. </p>
+    <p><h5>Основные правила:</h5></p>
+    <p>
+      <ul>
+        <li>Не атаковать домены <b>*.olymp.hackforces.com</b></li>
+        <li>Не пытаться сдать большое количество флагов. Ограничение попыток на одно задание для игрока - 30 </li>
+        <li>Не проводить DOS и DDOS-атаки на домены <b>*.olymp.hackforces.com и домены, которые вы найдёте в заданиях</b></li>
+        <li>Не обмениваться решениями, флагами, идеями <b>между командами</b>, даже после завершения вашего времени выполнения</li>
+        <li>Официальный канал связи - почта <a href="mailto:quals@hackforces.com">quals@hackforces.com</a>, она служит для решения технических проблем. Помощь и подсказки к заданиям <b>не выдаются</b></li>
+        <li>Все анонсы и состояние жюрейной системы можно посмотреть в нашем официальном канале Telegram - <a href="https://t.me/hackforces" target="_blank" rel="noopener noreferrer">https://t.me/hackforces</a></li>
+      </ul>
+    </p>
+    
+    <p><h5>Типы заданий</h5></p>
+    <p>Представлены 2 типа заданий - со <b>статическими</b> флагами и с <b>автоматическим</b> засчитыванием после правильного решения. <b>Если вы не увидели заветной надписи "вот ваш флаг"</b>, но задание пишет "вы всё сделали, задание выполнено", то это задание с автоматическим выполнением. </p>
+    <p>Для выполнения таких заданий вам необходим TOKEN - ваш персональный ключ для доступа к заданиям. Он находится в правом верхнем углу экрана после авторизации, его длина 80 символов</p>
+    <p>После его выполнения вы можете проверить своё решение в жюрейной системе - оно станет серым цветом (будет засчитано)</p>
+    <p>Если вы неверно ввели TOKEN в интерфейсе задания, то задание будет считаться проваленным! Поэтому, заранее убедитесь, что верно скопировали строчку TOKEN</p>
+    <p><h5>Статусы заданий</h5></p>
+    <p>В интерфейсе доступен статус заданий - зелёный, жёлтый и красный. Что соответствует "работает корректно", "болеет" и "не работает". Это помогает ориентироваться, почему у вас нет доступа к тому или иному ресурсу. </p>
+    
+    <p><h5>Разборы</h5></p>
+    <p>Описание заданий и решения будут доступны на сайте github.com/hackforces/ <b>после 2 апреля</b></p>
+  </div>
+  <!-- END RULES DIV -->
   <!-- CENTER BODY -->
 	<div class="row" id='tasks-div'>
 		<div class="col-md-8 offset-md-2">
@@ -127,7 +156,7 @@
 </main>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
@@ -137,5 +166,5 @@
 <script src="js/js.cookie.js"></script>
 <script src="js/jstorage.min.js"></script>
 <script src="js/sprintf.js"></script>
-<script src="js/api.js"></script>
+<script src="js/api.js?finals2k19"></script>
 </html>
