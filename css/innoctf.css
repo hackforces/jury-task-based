@@ -128,7 +128,8 @@ h5 {
     margin-bottom: 0;
 }
 #task-desc {
-    text-align: justify;
+    /* text-align: justify; */
+    overflow-wrap: break-word;
 }
 
 .badge {
@@ -138,7 +139,7 @@ h5 {
 
 #tags-div {
     padding: 0;
-    min-height: 100%;
+    /* min-height: 100%; */
     margin-top: 7px !important;
     background-color: rgba(88, 95, 105, 0.9) !important;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -146,4 +147,8 @@ h5 {
 }
 .col-md-3 {
     padding-right: 15px !important;
+}
+
+.modal-dialog {
+    max-width: 690px;
 }

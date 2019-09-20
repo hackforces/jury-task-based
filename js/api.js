@@ -1,6 +1,9 @@
 var HOST = "/api/"
 var CONTEST =  1
 var TASK = 0
+var converter = new showdown.Converter();
+converter.setOption('simplifiedAutoLink', true);
+moment.updateLocale('ru');
 
 function urlify(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g
@@ -44,6 +47,10 @@ getUrlParameter = (sParam) => {
   }
 }
 
+function checkBits(v, b) {
+  return v === (v | b)
+}
+
 function renderTaskStatus(task) {
   let t = timestamp()
   let _t = parseInt(task.last_seen, 10)
@@ -78,7 +85,7 @@ function checkTask() {
           contest_guid: CONTEST,
           flag: $("#task-flag").val()
         },
-      url: HOST + "user.checkTask"
+      url: HOST + "task.check"
     })
     .done( data => {
       $('#task-flag').css({"color": "#257227"}).val(data.message)
@@ -183,13 +190,15 @@ function checkProfile() {
     data: {contest: CONTEST}
   })
   .done( data => {
-    $("#profile-div").hide().html("")
-    $("#profile-div").append(sprintf(t, data.username)).animate('slow')
-    $("#profile-div").append(sprintf(t, "Points: " + data.points))
-    $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
-    $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
-    $("#profile-div").append(sprintf(t, "Position: " + data.position))
-    $("#profile-div").show()
+    setTimeout( () => {
+      $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
+      $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
+      $("#profile-div").append(sprintf(t, "Points: " + data.points))
+      $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
+      $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
+      $("#profile-div").append(sprintf(t, "Position: " + data.position))
+    }, 1000)
+    // $("#profile-div").hide().html("")
   })
   .fail( err => {
     if(err.status == 401)
@@ -205,6 +214,7 @@ function checkAuth() {
     $('#registration').show()
     $('#tasks-div').show()
     loadTasks(0)
+    checkProfile()
   }
   else {
     $('#registration').hide()
@@ -280,10 +290,17 @@ else
   $("#modal-container-41074").modal('show')
   let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
   $("#task-title").html(task.title)
-  $("#task-desc").html(urlify(task.description))
-  $("#task-tags").html("Tags: " + task.tags)
+  // $("#task-desc").html(urlify(task.description))
+  $("#task-desc").html(converter.makeHtml(task.description))
+  $("#task-tags").html(task.tags.split(',').map((el) => `<h5><span class="badge badge-pill badge-secondary">${el}</span></h5>`).join(" "))
   TASK = task.guid
   renderTaskInput()
+  console.log(task.task_flags)
+  if (checkBits(task.task_flags, 16)) {
+    $('#task-flag').prop("disabled", true)
+    $('#task-flag').val("Это автозачитываемый таск. Вам не нужно вводить флаги")
+    $('#task-submission').prop("disabled", true)
+  }
 })
 
 if (getUrlParameter('reset')) {
