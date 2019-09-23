@@ -19,14 +19,12 @@ rgba(60, 4, 88, 1) - фиолетовый
 }
 
 .navbar-brand {
-    height: 40px;
-}
-.navbar-brand {
-    background-image: url('/img/logo.png');
+    height: 45px;
+    background-image: url('/img/logo.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    width: 180px;
+    width: 110px;
 }
 #username, #password {
     padding: 0.18rem;

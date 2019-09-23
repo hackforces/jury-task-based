@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  3
+var CONTEST =  1
 var TASK = 0
 var converter = new showdown.Converter();
 converter.setOption('simplifiedAutoLink', true);
@@ -57,16 +57,17 @@ function renderTaskStatus(task) {
   let code = ""
   let out = ""
   if (task.task_flags === (task.task_flags | 32) || t - _t > 600) {
-    out = "Задача недоступна, проверена %s"
+    out = "Задача недоступна"
     code = "red"
   } else if (task.task_flags === (task.task_flags | 128) || t - _t > 300) {
-    out = "Задача болеет, проверена %s"
+    out = "Задача болеет"
     code = "yellow"
   } else {//if (task.task_flags === (task.task_flags | 64) || t - _t > 150) {
-    out = "Задача исправна, проверена %s"
+    out = "Задача исправна"
     code = "green"
   }
-  return [code, sprintf(out, moment.unix(_t).fromNow())]
+  return [code, out]
+  // return [code, sprintf(out + ", проверена %s", moment.unix(_t).fromNow())]
 }
 
 /* for rating showing */
@@ -96,7 +97,7 @@ function checkTask() {
     .fail( err => {
       if(err.status == 401)
       {
-        Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
+        Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
         checkAuth()
       }
       if(err.status < 500)
@@ -177,7 +178,7 @@ function loadTasks(method = 0) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
+      Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
       checkAuth()
     }
   })
@@ -192,20 +193,26 @@ function checkProfile() {
     data: {contest: CONTEST}
   })
   .done( data => {
+    $("#profile-div").hide().html("")
     setTimeout( () => {
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
-      $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
-      $("#profile-div").append(sprintf(t, "Points: " + data.points))
-      $("#profile-div").append(sprintf(t, "Tasks: " + data.solved + "/" + data.tasks))
-      $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
-      $("#profile-div").append(sprintf(t, "Position: " + data.position))
+      // $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
+      $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
+      $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
+      // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
+      let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
+      let total = $.jStorage.get("contest").tasks.length
+      // $("#profile-div").append(sprintf(t, "Points: " + data.points))
+      $("#profile-div").append(sprintf(t, "Tasks: " + solved + "/" + total))
+      // $("#profile-div").append(sprintf(t, "Tries: " + data.attempts))
+      // $("#profile-div").append(sprintf(t, "Position: " + data.position))
+      $("#profile-div").show()
     }, 1000)
-    // $("#profile-div").hide().html("")
   })
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf', {domain: '.olymp.hackforces.com'})
+      Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
       checkAuth()
     }
   })
@@ -216,6 +223,7 @@ function checkAuth() {
     $("#reset-div").hide()
     $('#registration').show()
     $('#tasks-div').show()
+    $('#profile-div').show()
     $('#rules-div').hide()
     loadTasks(0)
     checkProfile()
@@ -241,6 +249,7 @@ function Auth(user, pass) {
       console.log(xhr)
       if (xhr.status === 200) {
         Cookies.set('ctf', data.token, { expires: 7, domain: '.ctf.hackforces.com', secure: true })
+        $("#profile-div").html('')
         checkAuth()
       }
   })
