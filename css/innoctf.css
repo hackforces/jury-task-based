@@ -1,5 +1,26 @@
+@font-face {
+    font-family: ElektraTextPro;
+    src: url('/fonts/ElektraTextPro.otf');
+    /* src: url('/fonts/ElektraLightPro_3.otf'); */
+  }
+  @font-face {
+    font-family: ElektraTextProBold;
+    src: url('/fonts/ElektraTextProBold.otf');
+    /* src: url('/fonts/ElektraLightPro_3.otf'); */
+  }
+
 html, body {
+  font-family: ElektraTextPro;
   height: 100%;
+
+}
+b {
+    font-family: ElektraTextProBold;
+}
+
+body {
+    background-image: url('/img/background.png');
+    background-color: rgba(0,0,0,0.1);
 }
 #tasks-div {
   height: 90%;
@@ -55,15 +76,15 @@ main {
     width: 100%;
 /*    height: 100%; */
     /* background-image: url('/img/background.png'); */
-    background-repeat: no-repeat;
-    background-position-x: 98%;
-    background-size: contain;
-    background-color: rgba(255, 255, 255, 1);
+    /* background-repeat: no-repeat; */
+    /* background-position-x: 98%; */
+    /* background-size: contain; */
+    /* background-color: rgba(255, 255, 255, 1); */
     display: block;
   }
 
 .bg-dark {
-    background-color: rgba(128, 188, 0, 0.9) !important; 
+    background-color: rgba(128, 188, 0, 1) !important; 
 }
 #tasks {
     margin-top: 60px !important;
@@ -84,14 +105,14 @@ h4 {
     text-align: right;
 }
 .btn-info {
-    background-color: rgba(88, 95, 105, 0.9);
+    background-color: rgba(123, 134, 140, 0.9);
     color: rgba(255, 255, 255, 1);
     text-align: left;
     border: 0;
 }
 .btn-info:hover {
     color: rgba(88, 95, 105, 0.9);
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(197, 217, 231, 0.9);
 }
 .btn-sm {
     padding: .2rem .5rem;
@@ -150,4 +171,9 @@ h5 {
 
 .modal-dialog {
     max-width: 690px;
+}
+
+.btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active {
+    background-color: rgba(128, 188, 0, 1);
+    border-color: rgba(128, 188, 0, 1);
 }

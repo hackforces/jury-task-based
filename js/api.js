@@ -197,8 +197,8 @@ function checkProfile() {
     setTimeout( () => {
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
       // $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
-      $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
-      $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
+      // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
+      // $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
       // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
       let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
       let total = $.jStorage.get("contest").tasks.length
