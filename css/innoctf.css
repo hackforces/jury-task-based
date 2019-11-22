@@ -29,6 +29,10 @@ body {
   padding-bottom: 60px;
 }
 
+#rules-div {
+    background-color: rgba(123, 134, 140, 0.27);
+    padding: 10px;
+}
 /*
 rgba(88, 95, 105, 0.9) - салатовый
 rgba(23, 165, 137, 1) - зелёный 
@@ -41,11 +45,11 @@ rgba(60, 4, 88, 1) - фиолетовый
 
 .navbar-brand {
     height: 45px;
-    background-image: url('/img/logo.svg');
+    background-image: url('/img/logo.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    width: 110px;
+    width: 160px;
 }
 #username, #password {
     padding: 0.18rem;

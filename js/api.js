@@ -1,9 +1,9 @@
 var HOST = "/api/"
 var CONTEST =  1
 var TASK = 0
-var converter = new showdown.Converter();
-converter.setOption('simplifiedAutoLink', true);
-moment.updateLocale('ru');
+var converter = new showdown.Converter()
+converter.setOption('simplifiedAutoLink', true)
+moment.updateLocale('ru')
 
 function urlify(text) {
     var urlRegex = /(https?:\/\/[^\s]+)/g
@@ -198,7 +198,8 @@ function checkProfile() {
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
       // $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
       // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
-      // $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
+      $("#profile-div").append(sprintf(t, "Конец: " + moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + 28800000)).fromNow()))
+      $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
       // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
       let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
       let total = $.jStorage.get("contest").tasks.length
@@ -246,8 +247,9 @@ function Auth(user, pass) {
     url: HOST + "user.getToken"
   })
   .done( (data, textStatus, xhr) => {
-      console.log(xhr)
+      // console.log(xhr)
       if (xhr.status === 200) {
+        Join()
         Cookies.set('ctf', data.token, { expires: 7, domain: '.ctf.hackforces.com', secure: true })
         $("#profile-div").html('')
         checkAuth()
@@ -255,6 +257,26 @@ function Auth(user, pass) {
   })
   .fail( err => {
     alert("Auth failed: " + err.responseJSON.message)
+  })
+}
+
+function Join() {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    data: {contest_guid: CONTEST},
+    url: HOST + "contest.join"
+  })
+  .done( (data, textStatus, xhr) => {
+      // console.log(xhr)
+      if (xhr.status === 200) {
+        //
+      }
+  })
+  .fail( err => {
+    checkAuth()
+    // alert("Auth failed: " + err.responseJSON.message)
   })
 }
 
@@ -311,7 +333,7 @@ else
   $("#task-tags").html(task.tags.split(',').map((el) => `<h5><span class="badge badge-pill badge-secondary">${el}</span></h5>`).join(" "))
   TASK = task.guid
   renderTaskInput()
-  console.log(task.task_flags)
+  // console.log(task.task_flags)
   if (checkBits(task.task_flags, 16)) {
     $('#task-flag').prop("disabled", true)
     $('#task-flag').val("Это автозачитываемый таск. Вам не нужно вводить флаги")
@@ -320,6 +342,7 @@ else
 })
 if (getUrlParameter('reset')) {
   Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.ctf.hackforces.com', secure: true })
+  Join()
 }
 $( document ).ready( () => {
   $.jStorage.flush()

@@ -10,19 +10,21 @@
   <link rel="stylesheet" href="css/lights.css" type="text/css" />
   <link rel="shortcut icon" type="image/ico" href="/img/favicon.ico"/>
   <title>Inter IT 2019 - quals</title>
-  <script type="text/javascript" >
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym")
-    ym(52392991, "init", {
-         id:52392991,
-         clickmap:true,
-         trackLinks:true,
-         accurateTrackBounce:true,
-         webvisor:true
-    })
- </script>
- <noscript><div><img src="https://mc.yandex.ru/watch/52392991" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+  m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+  ym(56292502, "init", {
+       clickmap:true,
+       trackLinks:true,
+       accurateTrackBounce:true,
+       webvisor:true
+  });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/56292502" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </head>
 
 <body>
@@ -110,31 +112,46 @@
   <!-- END RESET PASSWORD BODY -->
   <!-- RULES DIV -->
   <div class="container" id="rules-div" style="padding-top: 30px;">
-    <h3 class='display=3'>Добро пожаловать на отборочный тур Inter IT 2019 по информационной безопасности!</h3>
-    <p>Тур длится с 10:00 19 ноября по 10:00 20 ноября <b>(время Московское)</b></p>
+    <h3 class='display=3'>Добро пожаловать на отборочный тур Международной Олимпиады Innopolis IT РОСТ (Inter IT) 2019 по информационной безопасности!</h3>
+    <p>Тур длится с 10:00 19 ноября по 23:59 24 ноября <b>(время Московское)</b></p>
     <p>На решение заданий отводится 8 часов, которые начинаются сразу после авторизации или запросе токена авторизации. </p>
+    <p>TOKEN - ваш персональный ключ для доступа к заданиям. Он находится в правом верхнем углу экрана после авторизации, его длина 80 символов</p>
     <p><h5>Основные правила:</h5></p>
     <p>
       <ul>
         <li>Не атаковать домены <b>*.ctf.hackforces.com</b></li>
-        <li>Не пытаться сдать большое количество флагов. Ограничение попыток на одно задание для игрока - 30 </li>
+        <li>Не пытаться сдать большое количество флагов. Ограничение попыток на одно задание для игрока - 10 </li>
         <li>Не проводить DoS и DDoS-атаки на домены <b>*.ctf.hackforces.com и домены, которые вы найдёте в заданиях</b></li>
         <li>Не обмениваться решениями, флагами, идеями <b>между участниками</b>, даже после завершения вашего времени выполнения</li>
         <li>Официальный канал связи - почта <a href="mailto:quals@hackforces.com">quals@hackforces.com</a>, она служит для решения технических проблем. Помощь и подсказки к заданиям <b>не выдаются</b></li>
-        <li>Все анонсы и состояние жюрейной системы можно посмотреть в нашем официальном канале Telegram - <a href="https://t.me/hackforces" target="_blank" rel="noopener noreferrer">https://t.me/hackforces</a></li>
+        <li>Все анонсы и состояние жюрейной системы можно посмотреть в нашем официальном канале Telegram - <a href="https://t.me/interit2019" target="_blank" rel="noopener noreferrer">https://t.me/interit2019</a></li>
       </ul>
     </p>
     
     <p><h5>Типы заданий</h5></p>
-    <p>Представлены 2 типа заданий - со <b>статическими</b> флагами и с <b>автоматическим</b> засчитыванием после правильного решения. <b>Если вы не увидели заветной надписи "вот ваш флаг"</b>, но задание пишет "вы всё сделали, задание выполнено", то это задание с автоматическим выполнением. </p>
-    <p>Для выполнения таких заданий вам необходим TOKEN - ваш персональный ключ для доступа к заданиям. Он находится в правом верхнем углу экрана после авторизации, его длина 80 символов</p>
-    <p>После его выполнения вы можете проверить своё решение в жюрейной системе - оно будет подсвечено серым цветом (будет засчитано и не активно)</p>
-    <p>Если вы неверно ввели TOKEN в интерфейсе задания, то задание будет считаться проваленным! Поэтому, заранее убедитесь, что верно скопировали строчку TOKEN</p>
+    <p>Представлены 2 типа заданий:</p>
+    <ol>
+      <li>со <b>статическими</b> флагами</li>
+      <li>с <b>автоматическим</b> засчитыванием после правильного решения. </li>
+    </ol>
+    <p>
+    <b>Если вы не увидели заветной надписи "вот ваш флаг"</b>, но задание пишет "вы всё сделали, задание выполнено", то это задание с автоматическим выполнением. </p>
+    <p>Для выполнения таких заданий вам необходим TOKEN - персональный ключ для доступа к заданиям.</p>
+    <p>После выполнения задания вы можете проверить своё решение в жюрейной системе - оно будет подсвечено серым цветом (будет засчитано и не активно)</p>
+    <p>Если вы неверно ввели TOKEN в интерфейсе задания, то задание будет считаться проваленным! <b>Поэтому заранее убедитесь, что верно скопировали строчку TOKEN</b></p>
     <p><h5>Статусы заданий</h5></p>
-    <p>В интерфейсе доступен статус заданий - зелёный, жёлтый и красный. Что соответствует "работает корректно", "болеет" и "не работает". Это помогает ориентироваться, почему у вас нет доступа к тому или иному ресурсу. </p>
+    <p>В интерфейсе доступен статус заданий:
+      <ol>
+        <li>зелёный - "работает корректно"</li>
+        <li>жёлтый - "болеет" или находится на перезагрузке</li>
+        <li>красный - "не работает"</li>
+      </ol>
+    </p>
+    <p>
+      Это поможет сориентироваться вам в случае, если нет доступа к тому или иному ресурсу. </p>
     
     <p><h5>Разборы</h5></p>
-    <p>Описание заданий и решения будут доступны на сайте github.com/hackforces/ <b>после 25 ноября</b></p>
+    <p>Описание заданий и решения будут доступны на сайте https://github.com/hackforces/ <b>после 25 ноября</b></p>
   </div>
   <!-- END RULES DIV -->
   <!-- CENTER BODY -->
@@ -167,5 +184,5 @@
 <script src="js/js.cookie.js"></script>
 <script src="js/jstorage.min.js"></script>
 <script src="js/sprintf.js"></script>
-<script src="js/api.js?finals2k19"></script>
+<script src="js/api.js?interit2k19"></script>
 </html>
