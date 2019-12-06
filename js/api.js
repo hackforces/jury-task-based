@@ -6,9 +6,10 @@ converter.setOption('simplifiedAutoLink', true)
 moment.updateLocale('ru')
 
 function urlify(text) {
-    var urlRegex = /(https?:\/\/[^\s]+)/g
+    var urlRegex = /(https?:\/\/[^<\s]+)/g
     return text.replace(urlRegex, function(url) {
-        return '<a target="_blank" href="' + url + '">' + url.substring(url.lastIndexOf('/')+1) + '</a>'
+        let a = url.lastIndexOf('/')+1 === url.length ? url :url.substring(url.lastIndexOf('/')+1) 
+        return '<a target="_blank" href="' + url + '">' + a + '</a>'
     })
 }
 
@@ -344,8 +345,8 @@ else
   $("#modal-container-41074").modal('show')
   let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
   $("#task-title").html(task.title)
-  // $("#task-desc").html(urlify(task.description))
-  $("#task-desc").html(converter.makeHtml(task.description))
+  $("#task-desc").html(converter.makeHtml(urlify(task.description)))
+  // $("#task-desc").html(converter.makeHtml(task.description))
   $("#task-tags").html(task.tags.split(',').map((el) => `<h5><span class="badge badge-pill badge-secondary">${el}</span></h5>`).join(" "))
   TASK = task.guid
   renderTaskInput()
