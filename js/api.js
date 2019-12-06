@@ -1,4 +1,4 @@
-var HOST = "//localhost:8080/api/"
+var HOST = "/api/"
 var CONTEST =  'c66009ab-2845-4991-8f49-1be3a5ffa461'
 var TASK = 0
 var converter = new showdown.Converter()
@@ -198,10 +198,19 @@ function checkProfile() {
   .done( data => {
     $("#profile-div").hide().html("")
     setTimeout( () => {
+      let time_status
+      if ($.jStorage.get("contest").contest.date_start > new Date().getTime()) {
+        time_status = `Начало: ${moment(new Date(new Date($.jStorage.get("contest").contest.date_start*1000))).fromNow()}`
+      } else if (new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + $.jStorage.get('contest').contest.timelimit * 1000 < new Date().getTime() )
+      {
+        time_status = 'Вы закончили'
+      } else {
+        time_status = `Конец: ${moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + $.jStorage.get('contest').contest.timelimit * 1000 )).fromNow()}`
+      }
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
-      // $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
+      $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
       // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
-      $("#profile-div").append(sprintf(t, "Конец: " + moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + 36000000)).fromNow()))
+      $("#profile-div").append(sprintf(t, time_status))
       $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
       // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
       let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
