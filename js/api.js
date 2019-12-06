@@ -1,5 +1,5 @@
-var HOST = "/api/"
-var CONTEST =  1
+var HOST = "//localhost:8080/api/"
+var CONTEST =  'c66009ab-2845-4991-8f49-1be3a5ffa461'
 var TASK = 0
 var converter = new showdown.Converter()
 converter.setOption('simplifiedAutoLink', true)
@@ -86,6 +86,7 @@ function checkTask() {
           contest_guid: CONTEST,
           flag: $("#task-flag").val()
         },
+      headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
       url: HOST + "task.check"
     })
     .done( data => {
@@ -97,7 +98,7 @@ function checkTask() {
     .fail( err => {
       if(err.status == 401)
       {
-        Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
+        Cookies.remove('ctf', {domain: `.${window.location.hostname}`})
         checkAuth()
       }
       if(err.status < 500)
@@ -153,7 +154,8 @@ function loadTasks(method = 0) {
     dataType: "json",
     crossDomain: true,
     url: HOST + "contest.detail",
-    data: {guid: CONTEST}
+    data: {guid: CONTEST},
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
   })
   .done( data => {
     $.jStorage.set("contest", data)
@@ -178,7 +180,7 @@ function loadTasks(method = 0) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
+      Cookies.remove('ctf', {domain: `.${wondow.location.hostname}`})
       checkAuth()
     }
   })
@@ -190,6 +192,7 @@ function checkProfile() {
     dataType: "json",
     crossDomain: true,
     url: HOST + "user.getStat",
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     data: {contest: CONTEST}
   })
   .done( data => {
@@ -198,7 +201,7 @@ function checkProfile() {
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
       // $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
       // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
-      $("#profile-div").append(sprintf(t, "Конец: " + moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + 28800000)).fromNow()))
+      $("#profile-div").append(sprintf(t, "Конец: " + moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + 36000000)).fromNow()))
       $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
       // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
       let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
@@ -213,7 +216,7 @@ function checkProfile() {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf', {domain: '.ctf.hackforces.com'})
+      Cookies.remove('ctf', {domain: `.${window.location.hostname}`})
       checkAuth()
     }
   })
@@ -243,19 +246,19 @@ function Auth(user, pass) {
     type: "POST",
     dataType: "json",
     crossDomain: true,
-    data: {username: user, password: pass},
+    data: {email: user, password: pass},
     url: HOST + "user.getToken"
   })
   .done( (data, textStatus, xhr) => {
-      // console.log(xhr)
-      if (xhr.status === 200) {
-        Join()
-        Cookies.set('ctf', data.token, { expires: 7, domain: '.ctf.hackforces.com', secure: true })
+      if (xhr.status === 200 ) {
+        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}` }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
+        Join()
       }
   })
   .fail( err => {
+    console.log(err)
     alert("Auth failed: " + err.responseJSON.message)
   })
 }
@@ -266,17 +269,20 @@ function Join() {
     dataType: "json",
     crossDomain: true,
     data: {contest_guid: CONTEST},
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     url: HOST + "contest.join"
   })
   .done( (data, textStatus, xhr) => {
       // console.log(xhr)
       if (xhr.status === 200) {
-        //
+        
       }
   })
   .fail( err => {
-    checkAuth()
-    // alert("Auth failed: " + err.responseJSON.message)
+    if (err.status !== 406) {
+      checkAuth()
+      alert("Auth failed: " + err.responseJSON.message)
+    }
   })
 }
 
@@ -286,6 +292,7 @@ function sendToken() {
     dataType: "json",
     crossDomain: true,
     data: {email: $("#reset-email").val()},
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     url: HOST + "user.sendToken"
   })
   .done( (data, textStatus, xhr) => {
@@ -341,7 +348,14 @@ else
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: '.ctf.hackforces.com', secure: true })
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `${window.location.hostname}`, secure: false }) 
+  $.ajaxSetup({
+    beforeSend: function (xhr)
+    {
+      xhr.setRequestHeader("Accept","application/vvv.website+json;version=1");
+      xhr.setRequestHeader("Authorization",`Bearer ${data.token}`);
+    }
+  });
   Join()
 }
 $( document ).ready( () => {
