@@ -187,7 +187,7 @@ function loadTasks(method = 0) {
   })
 }
 function checkProfile() {
-  let t = `<div class="d-inline m-2 p-0 text-white">%s</div>`
+  let t = `<div class="d-inline m-2 p-0 text-white">%s </div>`
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -209,7 +209,7 @@ function checkProfile() {
         time_status = `Конец: ${moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + $.jStorage.get('contest').contest.timelimit * 1000 )).fromNow()}`
       }
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
-      $("#profile-div").append(sprintf(t, "TOKEN: " + Cookies.get('ctf')))
+      $("#profile-div").append(sprintf(t, `TOKEN: ${Cookies.get('ctf')}`))
       // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
       $("#profile-div").append(sprintf(t, time_status))
       $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
@@ -261,7 +261,7 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}` }) // здесь было true
+        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
         Join()
@@ -302,7 +302,6 @@ function sendToken() {
     dataType: "json",
     crossDomain: true,
     data: {email: $("#reset-email").val()},
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     url: HOST + "user.sendToken"
   })
   .done( (data, textStatus, xhr) => {
@@ -358,12 +357,12 @@ else
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `${window.location.hostname}`, secure: false }) 
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `${window.location.hostname}`, secure: true }) 
   $.ajaxSetup({
     beforeSend: function (xhr)
     {
       xhr.setRequestHeader("Accept","application/vvv.website+json;version=1");
-      xhr.setRequestHeader("Authorization",`Bearer ${data.token}`);
+      xhr.setRequestHeader("Authorization",`Bearer ${getUrlParameter('reset')}`);
     }
   });
   Join()
