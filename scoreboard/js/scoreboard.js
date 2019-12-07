@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var contest = 1;
+var contest = 'c66009ab-2845-4991-8f49-1be3a5ffa461';
 function checkScore() {
   $.ajax({
     type: "GET",
@@ -29,13 +29,14 @@ function checkContest() {
         $("#date_end")
         .countdown(new Date(parseInt(data.contest.date_end) * 1000))
         .on('update.countdown', function(event) {
-            $(this).text(event.strftime('%H:%M:%S'));
+          
+            $(this).text(event.strftime('%D дней, %H:%M:%S'));
         })
 
         $("#date_start")
         .countdown(new Date(parseInt(data.contest.date_start) * 1000), {elapse:true})
         .on('update.countdown', function(event) {
-          $(this).text(event.strftime('%H:%M:%S'));
+          $(this).text(event.strftime('%D дней, %H:%M:%S'));
         })
     },
   });

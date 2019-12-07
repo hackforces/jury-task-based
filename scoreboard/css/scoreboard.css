@@ -20,7 +20,7 @@ h2 {
     display: none;
 }
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-   background-color: rgba(255,91,0,0.9);
+   background-color: rgba(128, 188, 0, 1);
    color: #ffffff;
    font-weight: bold;
    font-size: 45px;
@@ -45,4 +45,9 @@ thead {
 
 font-size: 48px;
 text-align:center;
+}
+#img {
+  background-color: rgba(128, 188, 0, 1);
+  padding: 6px 10px;
+  border-radius: 20px;
 }
