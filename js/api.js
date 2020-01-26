@@ -268,7 +268,6 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
-        console.log(window.location.hostname)
         Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
@@ -366,7 +365,6 @@ function checkInTeam() {
         teamMembers(data.guid)
       })
     } else {
-      $("#team-info-div").hide()
       $("#team-info-div").hide()
     }
   })
