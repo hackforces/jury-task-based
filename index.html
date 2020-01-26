@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/innoctf.css" type="text/css" />
   <link rel="stylesheet" href="css/lights.css" type="text/css" />
   <link rel="shortcut icon" type="image/ico" href="/img/favicon.ico"/>
-  <title>OOIU 2020 - quals</title>
+  <title>OOIU 2020 - quals vol.2</title>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >
   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -112,18 +112,18 @@
   <!-- END RESET PASSWORD BODY -->
   <!-- RULES DIV -->
   <div class="container" id="rules-div" style="padding-top: 30px;">
-    <h3 class='display=3'>Добро пожаловать на отборочный тур Открытой Олимпиады Университета Иннополис 2020 (OOIU) 2019 по информационной безопасности!</h3>
-    <p>Тур длится с 10:00 7 декабря по 22:00 8 декабря <b>(время Московское)</b></p>
-    <p>На решение заданий отводится 10 часов, которые начинаются сразу <b>после авторизации</b> или <b>запросе токена авторизации</b>. </p>
-    <p><h6>Формат флага: <b>CTF{....}</b> и <b>flag{....}</b></h6>. Под .... подразумевается строка</p>
+    <h3 class='display=3'>Добро пожаловать на второй отборочный тур Открытой Олимпиады Университета Иннополис 2020 (OOIU) по информационной безопасности!</h3>
+    <p>Тур пройдёт 8 февраля с 10:00 до 18:00 <b>(время Московское)</b></p>
+    <p>На решение заданий отводится 8 часов</p>
+    <p><h6>Формат флага: <b>CTF{....}</b>. Под .... подразумевается строка</h6></p>
     <p>TOKEN - ваш персональный ключ для доступа к заданиям. Он находится в правом верхнем углу экрана после авторизации, его длина 80 символов</p>
     <p><h5>Основные правила:</h5></p>
     <p>
       <ul>
         <li>Не атаковать домены <b>*.ctf.hackforces.com</b></li>
-        <li>Не пытаться сдать большое количество флагов. Ограничение попыток на одно задание для игрока - 10 </li>
-        <li>Не проводить DoS и DDoS-атаки на домены <b>*.ctf.hackforces.com и домены, которые вы найдёте в заданиях</b></li>
-        <li>Не обмениваться решениями, флагами, идеями <b>между участниками</b>, даже после завершения вашего времени выполнения</li>
+        <li>Не пытаться сдать большое количество флагов. Ограничение попыток на одно задание для команды - 10. После достижения этого лимита сдать задание вы <b>не сможете</b></li>
+        <li>Не проводить DoS и DDoS-атаки на домены <b>*.ctf.hackforces.com, а также IP-адреса и домены, которые вы найдёте в заданиях</b></li>
+        <li>Не обмениваться решениями, флагами, идеями <b>между командами</b>, даже после завершения вашего времени выполнения</li>
         <li>Официальный канал связи - почта <a href="mailto:quals@hackforces.com">quals@hackforces.com</a>, она служит для решения технических проблем. Помощь и подсказки к заданиям <b>не выдаются</b></li>
         <li>Все анонсы и состояние жюрейной системы можно посмотреть в нашем официальном канале Telegram - <a href="https://t.me/hackforces" target="_blank" rel="noopener noreferrer">https://t.me/hackforces</a></li>
       </ul>
@@ -133,19 +133,20 @@
     <p>Представлены два типа заданий:</p>
     <ol>
       <li>со <b>статическими</b> флагами</li>
+      <li><b>динамическими</b> флагами (меняются с течением времени или после сдачи командой)</li>
       <li>с <b>автоматическим</b> засчитыванием после правильного решения. </li>
     </ol>
     <p>
     <b>Если вы не увидели заветной надписи "вот ваш флаг"</b>, но задание пишет "вы всё сделали, задание выполнено", то это задание с автоматическим выполнением. </p>
-    <p>Для выполнения таких заданий вам необходим TOKEN - персональный ключ для доступа к заданиям.</p>
-    <p>После выполнения задания вы можете проверить своё решение в жюрейной системе - оно будет подсвечено серым цветом (будет засчитано и не активно)</p>
+    <p>Для выполнения таких заданий вам необходим <b>TOKEN</b> - персональный ключ для доступа к заданиям.</p>
+    <p>После выполнения задания вы можете проверить своё решение в жюрейной системе - оно будет отмечено серым цветом (будет засчитано и не активно)</p>
     <p>Если вы неверно ввели TOKEN в интерфейсе задания, то задание будет считаться проваленным! <b>Поэтому заранее убедитесь, что верно скопировали строчку TOKEN</b></p>
     <p><h5>Статусы заданий</h5></p>
     <p>В интерфейсе доступен статус заданий:
       <ol>
-        <li>зелёный - "работает корректно"</li>
-        <li>жёлтый - "болеет" или находится на перезагрузке</li>
-        <li>красный - "не работает"</li>
+        <li><b class='bg-success'>&nbsp;зелёный&nbsp;</b> - "работает корректно"</li>
+        <li><b class='bg-warning'>&nbsp;жёлтый&nbsp;&nbsp;</b> - "болеет" или находится на перезагрузке</li>
+        <li><b class='bg-danger'>&nbsp;красный&nbsp;</b> - "не работает"</li>
       </ol>
     </p>
     <p>
@@ -172,18 +173,50 @@
   </div> 
  
   <!-- END CENTER BODY -->
+  <!-- TEAM REGISTER BODY -->
+  <div class="row" id="teams-div" style="display: none;">
+    <div class="col-md-4 offset-md-2">
+      <form id="team-add-form">
+        <h3>Создание команды</h3>
+        <div class="form-group">
+          <label for="teamName">Название команды</label>
+          <input type="text" class="form-control" name="name" aria-describedby="makeHelp" placeholder="Введите название команды" autocomplete="off">
+          <small id="makeHelp" class="form-text text-muted">Можно участвовать только в одной команде</small>
+        </div>
+        <div class="form-group">
+          <label for="teamName">Тэг команды</label>
+          <input type="text" class="form-control" name="tag" aria-describedby="makeHelp2" placeholder="Введите тэг команды" autocomplete="off">
+          <small id="makeHelp2" class="form-text text-muted">Для короткого отображения в рейтинге</small>
+        </div>
+        <button type="submit" class="btn btn-info">Создать</button>
+      </form>
+      <p></p>
+      <form id="team-join-form">
+        <p><h3>Присоединиться к команде</h3></p>
+        <div class="form-group">
+          <label for="teamName">Код приглашения</label>
+          <input type="text" class="form-control" name="teamCode" aria-describedby="joinHelp" placeholder="Введите код присоединения"  maxlength="12" minlength="12">
+          <small id="joinHelp" class="form-text text-muted"></small>
+        </div>
+        <button type="submit" class="btn btn-info">Присоединиться</button>
+      </form>
+    </div>
+    <div class='col-md-4' id="team-info-div">
+    </div>
+ </div>
+  <!-- END TEAM REGISTER BODY -->
 </main>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ru.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
-<script src="js/js.cookie.js"></script>
-<script src="js/jstorage.min.js"></script>
-<script src="js/sprintf.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jStorage/0.4.12/jstorage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
 <script src="js/api.js?inno=2020"></script>
 </html>

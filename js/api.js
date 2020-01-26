@@ -1,5 +1,5 @@
 var HOST = "/api/"
-var CONTEST =  'c66009ab-2845-4991-8f49-1be3a5ffa461'
+var CONTEST =  '9d5eda30-c2ec-4cd2-82d2-b2fba356b0cb'
 var TASK = 0
 var converter = new showdown.Converter()
 converter.setOption('simplifiedAutoLink', true)
@@ -160,8 +160,13 @@ function loadTasks(method = 0) {
   })
   .done( data => {
     $.jStorage.set("contest", data)
-    if(data.tasks.length == 0)
-      $("#tasks-div").html("<div class='container'><h3 class='display-2 text-center'>Задания недоступны</h3></div>")
+    if(data.tasks.length == 0) {
+      $("#tasks-div").hide()
+      // $("#tasks-div").html("<div class='container'><h3 class='display-2 text-center'>Задания недоступны</h3></div>")
+      checkInTeam()
+      $("#teams-div").show()
+    }
+
     if (method == 0) {
       renderTags(data.tasks)
       $.each(data.tasks, ( index, value ) => {renderTask(value)})
@@ -181,7 +186,7 @@ function loadTasks(method = 0) {
   .fail( err => {
     if(err.status == 401)
     {
-      Cookies.remove('ctf', {domain: `.${wondow.location.hostname}`})
+      Cookies.remove('ctf', {domain: `.${window.location.hostname}`})
       checkAuth()
     }
   })
@@ -235,10 +240,11 @@ function checkAuth() {
   if(Cookies.get('ctf')) {
     $("#login-div").hide()
     $("#reset-div").hide()
+    $('#rules-div').hide()
+    $("#tags-div").show()
     $('#registration').show()
     $('#tasks-div').show()
     $('#profile-div').show()
-    $('#rules-div').hide()
     loadTasks(0)
     checkProfile()
   }
@@ -246,6 +252,7 @@ function checkAuth() {
     $('#registration').hide()
     $('#tasks-div').hide()
     $('#profile-div').hide()
+    $("#tags-div").hide()
     $('#login-div').show()
     $("#reset-div").show()
     $('#rules-div').show()
@@ -261,10 +268,11 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
+        console.log(window.location.hostname)
         Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
-        Join()
+        // Join()
       }
   })
   .fail( err => {
@@ -272,7 +280,6 @@ function Auth(user, pass) {
     alert("Auth failed: " + err.responseJSON.message)
   })
 }
-
 function Join() {
   $.ajax({
     type: "POST",
@@ -295,7 +302,6 @@ function Join() {
     }
   })
 }
-
 function sendToken() {
   $.ajax({
     type: "POST",
@@ -312,11 +318,147 @@ function sendToken() {
     alert("Ошибка отправки письма: " + err.responseJSON.message)
   })
 }
-
 function renderTaskInput() {
     $("#task-flag").val("").attr('style', '')
     $("#task-submission").prop("disabled", false)
     $("#task-flag").prop("disabled", false)
+}
+function teamMembers(team) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "team.detail?guid=" + team
+  })
+  .done( (data, _textStatus, _xhr) => {
+    let members = ""
+    for (i of data.members)
+      members += sprintf("<p><b>%s</b> (%s)</p>", i.username, i.email)
+    $("#team-info-div").append("<p>Члены команды:</p>" + members)
+
+  })
+  .fail( err => {
+    checkAuth()
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+function checkInTeam() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "contest.detail?guid=" + CONTEST,
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
+  })
+  .done( (data, _textStatus, _xhr) => {
+    if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0 && data.mystatus.hasOwnProperty('guid')) {
+      
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        crossDomain: true,
+        url: HOST + "team.detail?guid=" + data.mystatus.guid,
+        headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
+      })
+      .done( (data, _textStatus, _xhr) => {
+        let mydiv = "<h3>Ваша команда</h3><p><b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p><p><button onclick='leaveTeam(\"%s\");' class='btn btn-info'> Покинуть команду</button></p"
+        $("#team-info-div").html(sprintf(mydiv, data.name, data.tag, data.invite_code, data.guid)).show()
+        teamMembers(data.guid)
+      })
+    } else {
+      $("#team-info-div").hide()
+      $("#team-info-div").hide()
+    }
+  })
+  .fail( err => {
+    checkAuth()
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+function addTeam(team) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
+    data: {name: team.name, tag: team.tag, country: "RU", contest: CONTEST},
+    url: HOST + "team.add"
+  })
+  .done( data => {
+  //   console.log(data);
+    if (data.status != true) {
+      checkAuth()
+    }
+    else {
+      checkInTeam()
+    }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function joinTeam(team) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
+    data: {contest: CONTEST, invite_code: team.teamCode},
+    url: HOST + "team.join"
+  })
+  .done( data => {
+    if (data.status != true) {
+      checkAuth()
+    }
+    else {
+      checkInTeam()
+    }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function leaveTeam(team) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    crossDomain: true,
+    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
+    data: {team: team},
+    url: HOST + "team.leave"
+  })
+  .done( data => {
+    if (data.status != true) { checkAuth() }
+    else { checkInTeam() }
+  })
+  .fail( err => {
+    alert("fail: " + err.responseJSON.message)
+  })
+}
+
+function getTeams() {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "contest.scoreboard",
+    data: {guid: CONTEST}
+  })
+  .done( data => {
+    $("#teams-list").hide().html("")
+    for (let t of data.users)
+    $("#teams-list").append($("<b></b>").text(t.username)).append("<br>")
+    $("#teams-list").show() //.slideDown()
+  })
+  .fail( err => {
+    if(err.status == 401)
+    {
+      Cookies.remove('ctf');
+      checkAuth();
+    }
+  })
 }
 
 $("#login-form").on("submit", (event) => {
@@ -324,25 +466,40 @@ $("#login-form").on("submit", (event) => {
   $(this).serialize()
   Auth($("#username").val(), $("#password").val())
 })
+
+$("#team-add-form").on("submit", (event) => {
+  event.preventDefault()
+  addTeam(formToJSON($("#team-add-form")))
+})
+
+$("#team-join-form").on("submit", (event) => {
+  event.preventDefault()
+  joinTeam(formToJSON($("#team-join-form")))
+})
+
 $("#checkTask").on("submit", (event) => {
   event.preventDefault()
   checkTask()
 })
+
 $(".solved_task").click(function(e) {
   e.preventDefault()
 })
+
 $("#tags-div").on('click', 'button', (event) => {
   filter(event.currentTarget.dataset.tags)
   $("button").removeClass('active')
   $(event.currentTarget).addClass('active')
 })
+
 $("#tasks-list").on('click', '.task', (event) => {
-event.preventDefault()
-if($(event.currentTarget).hasClass("solved"))
-  return
-else
-  $("#modal-container-41074").modal('show')
+  event.preventDefault()
+  if($(event.currentTarget).hasClass("solved"))
+    return
+  else
+    $("#modal-container-41074").modal('show')
   let task = $.jStorage.get("contest").tasks.filter((t) => {return t.guid == event.currentTarget.dataset.guid})[0]
+  task.tags = task.tags ? task.tags : "all"
   $("#task-title").html(task.title)
   $("#task-desc").html(converter.makeHtml(urlify(task.description)))
   // $("#task-desc").html(converter.makeHtml(task.description))
@@ -357,7 +514,7 @@ else
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `${window.location.hostname}`, secure: true }) 
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: true }) 
   $.ajaxSetup({
     beforeSend: function (xhr)
     {
