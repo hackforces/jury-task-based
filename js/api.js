@@ -279,28 +279,6 @@ function Auth(user, pass) {
     alert("Auth failed: " + err.responseJSON.message)
   })
 }
-function Join() {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    crossDomain: true,
-    data: {contest_guid: CONTEST},
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
-    url: HOST + "contest.join"
-  })
-  .done( (data, textStatus, xhr) => {
-      // console.log(xhr)
-      if (xhr.status === 200) {
-        
-      }
-  })
-  .fail( err => {
-    if (err.status !== 406) {
-      checkAuth()
-      alert("Auth failed: " + err.responseJSON.message)
-    }
-  })
-}
 function sendToken() {
   $.ajax({
     type: "POST",
@@ -520,7 +498,6 @@ if (getUrlParameter('reset')) {
       xhr.setRequestHeader("Authorization",`Bearer ${getUrlParameter('reset')}`);
     }
   });
-  Join()
 }
 $( document ).ready( () => {
   $.jStorage.flush()
