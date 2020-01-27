@@ -87,7 +87,6 @@ function checkTask() {
           contest_guid: CONTEST,
           flag: $("#task-flag").val()
         },
-      headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
       url: HOST + "task.check"
     })
     .done( data => {
@@ -155,8 +154,7 @@ function loadTasks(method = 0) {
     dataType: "json",
     crossDomain: true,
     url: HOST + "contest.detail",
-    data: {guid: CONTEST},
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
+    data: {guid: CONTEST}
   })
   .done( data => {
     $.jStorage.set("contest", data)
@@ -198,7 +196,6 @@ function checkProfile() {
     dataType: "json",
     crossDomain: true,
     url: HOST + "user.getStat",
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     data: {contest: CONTEST}
   })
   .done( data => {
@@ -214,10 +211,10 @@ function checkProfile() {
         time_status = `Конец: ${moment(new Date(new Date($.jStorage.get("contest").mystatus.timestamp).getTime() + $.jStorage.get('contest').contest.timelimit * 1000 )).fromNow()}`
       }
       $("#profile-div").append(sprintf(t, data.username)) //.animate('slow')
-      $("#profile-div").append(sprintf(t, `TOKEN: ${Cookies.get('ctf')}`))
-      // $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
-      $("#profile-div").append(sprintf(t, time_status))
-      $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
+      // $("#profile-div").append(sprintf(t, `TOKEN: ${Cookies.get('ctf')}`))
+      $("#profile-div").append(sprintf(t, "Team: " +$.jStorage.get("contest").mystatus.name))
+      // $("#profile-div").append(sprintf(t, time_status))
+      // $("#profile-div").append(sprintf(t, "PTS: " +$.jStorage.get("contest").mystatus.points))
       // $("#profile-div").append(sprintf(t, "Points: " +$.jStorage.get("contest").t.points))
       let solved = $.jStorage.get("contest").tasks.filter((t) => {return t.solved == true}).length
       let total = $.jStorage.get("contest").tasks.length
@@ -268,7 +265,7 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true }) // здесь было true
+        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: false }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
         // Join()
@@ -324,8 +321,8 @@ function checkInTeam() {
     type: "GET",
     dataType: "json",
     crossDomain: true,
-    url: HOST + "contest.detail?guid=" + CONTEST,
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
+    url: HOST + "contest.detail",
+    data: {guid: CONTEST},
   })
   .done( (data, _textStatus, _xhr) => {
     if (data.hasOwnProperty('mystatus') && Object.keys(data.mystatus).length > 0 && data.mystatus.hasOwnProperty('guid')) {
@@ -335,12 +332,15 @@ function checkInTeam() {
         dataType: "json",
         crossDomain: true,
         url: HOST + "team.detail?guid=" + data.mystatus.guid,
-        headers: {Authorization: `Bearer ${Cookies.get('ctf')}`}
       })
       .done( (data, _textStatus, _xhr) => {
         let mydiv = "<h3>Ваша команда</h3><p><b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p><p><button onclick='leaveTeam(\"%s\");' class='btn btn-info'> Покинуть команду</button></p"
-        $("#team-info-div").html(sprintf(mydiv, data.name, data.tag, data.invite_code, data.guid)).show()
-        teamMembers(data.guid)
+        $("#team-info-div").html(sprintf(mydiv, data.name, data.tag, data.invite_code, data.guid)).show()  
+        let members = ""
+        for (i of data.members)
+          members += sprintf("<p><b>%s</b> (%s)</p>", i.username, i.email)
+        $("#team-info-div").append("<p>Члены команды:</p>" + members)
+        
       })
     } else {
       $("#team-info-div").hide()
@@ -356,7 +356,6 @@ function addTeam(team) {
     type: "POST",
     dataType: "json",
     crossDomain: true,
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     data: {name: team.name, tag: team.tag, country: "RU", contest: CONTEST},
     url: HOST + "team.add"
   })
@@ -379,7 +378,6 @@ function joinTeam(team) {
     type: "POST",
     dataType: "json",
     crossDomain: true,
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     data: {contest: CONTEST, invite_code: team.teamCode},
     url: HOST + "team.join"
   })
@@ -401,7 +399,6 @@ function leaveTeam(team) {
     type: "POST",
     dataType: "json",
     crossDomain: true,
-    headers: {Authorization: `Bearer ${Cookies.get('ctf')}`},
     data: {team: team},
     url: HOST + "team.leave"
   })
@@ -490,12 +487,11 @@ $("#tasks-list").on('click', '.task', (event) => {
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: true }) 
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: false }) 
   $.ajaxSetup({
     beforeSend: function (xhr)
     {
       xhr.setRequestHeader("Accept","application/vvv.website+json;version=1");
-      xhr.setRequestHeader("Authorization",`Bearer ${getUrlParameter('reset')}`);
     }
   });
 }
@@ -506,6 +502,7 @@ $( document ).ready( () => {
     if(!Cookies.get('ctf'))
       checkAuth()
     else
-      loadTasks(1)
+      checkInTeam()
+      // loadTasks(1)
   }, 10000)
 })
