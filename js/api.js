@@ -334,12 +334,15 @@ function checkInTeam() {
         url: HOST + "team.detail?guid=" + data.mystatus.guid,
       })
       .done( (data, _textStatus, _xhr) => {
-        let mydiv = "<h3>Ваша команда</h3><p><b>%s</b> (%s)</p><p>Код приглашения: <b>%s</b></p><p><button onclick='leaveTeam(\"%s\");' class='btn btn-info'> Покинуть команду</button></p"
-        $("#team-info-div").html(sprintf(mydiv, data.name, data.tag, data.invite_code, data.guid)).show()  
+        $("#team-info-div").show()
+        $("#team-info-name").text(`${data.name} (${data.tag})`)
+        $("#team-info-code").text(`${data.invite_code}`)
+        let mydiv = "<button onclick='leaveTeam(\"%s\");' class='btn btn-info'>Покинуть команду</button></p"
+        $("#team-info-leave").html(sprintf(mydiv, data.guid))
         let members = ""
         for (i of data.members)
           members += sprintf("<p><b>%s</b> (%s)</p>", i.username, i.email)
-        $("#team-info-div").append("<p>Члены команды:</p>" + members)
+        $("#team-info-members").html(members)
         
       })
     } else {
