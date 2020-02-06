@@ -12,7 +12,9 @@
 html, body {
   font-family: ElektraTextPro;
   height: 100%;
-
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 b {
     font-family: ElektraTextProBold;
@@ -23,11 +25,20 @@ body {
     background-color: rgba(0,0,0,0.1);
 }
 #tasks-div {
-  height: 90%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding-bottom: 60px;
+    height: 90%;
+    /* position: relative;
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 60px; */
 }
+#tasks {
+    /* position: relative;
+    height: 90%;
+    overflow-y: hidden;
+    overflow-x: hidden; */
+    /* margin-bottom: 60px; */
+  }
 
 #rules-div {
     background-color: rgba(123, 134, 140, 0.27);
@@ -40,9 +51,9 @@ rgba(60, 4, 88, 1) - фиолетовый
 */
 
 .container-fluid {
+    margin: 0;
     padding: 0;
 }
-
 .navbar-brand {
     height: 45px;
     background-image: url('/img/logo.png');
@@ -90,9 +101,21 @@ main {
 .bg-dark {
     background-color: rgba(128, 188, 0, 1) !important; 
 }
-#tasks {
-    margin-top: 60px !important;
+
+.scroll-area {
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+    overflow-y: scroll; 
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
+.scroll-area::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+/* #tasks {
+    margin-top: 60px !important;
+} */
 .container {
     padding: 0;
 }
@@ -138,6 +161,17 @@ h4 {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     /* border: 1px solid #000000; */
 }
+.announce {
+    margin: 3px 0;
+    min-height: 7rem;
+    max-height: 15rem;
+}
+.announce .card-header, .announce .card-footer, .announce .card-body {
+    padding: 0.2rem 0.8rem;
+}
+.announce .card-body .card-title {
+    margin-bottom: 0.3rem;
+}
 .card-body, .card-header {
     padding: 0.8rem;
 }
@@ -153,12 +187,15 @@ h5 {
     /* text-align: justify; */
     overflow-wrap: break-word;
 }
-
+#task-tags {
+    padding: 0.6rem;
+}
 .badge {
     font-weight: 400;
     font-size: 15px;
-    padding: 0.3rem 0.3rem;
+    padding: 0.35rem 0.5rem;
     cursor: default;
+    margin: 0 0.5rem;
 }
 
 #tags-div {

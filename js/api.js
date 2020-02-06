@@ -189,6 +189,54 @@ function loadTasks(method = 0) {
     }
   })
 }
+function loadAnnounces(method = 0) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    crossDomain: true,
+    url: HOST + "contest.announces",
+    data: {guid: CONTEST}
+  })
+  .done( data => {
+    if(data.length == 0) {
+      $("#announces").hide()
+    }
+    let template = `
+      <div class="col-md-12" id="%s">
+      <div class="card text-white bg-primary announce">
+        <div class="card-header">%s</div>
+        <div class="card-body">
+          <h5 class="card-title">%s</h5>
+          <p class="card-text">%s</p>
+        </div>
+        <div class="card-footer"><i>%s</i></div>
+      </div>
+    </div>
+    `
+    let announces
+    if ($.jStorage.get("announces") === null) {
+      announces = data
+    } else if (data.length > $.jStorage.get("announces").length) {
+      announces = data.slice(0, data.length - $.jStorage.get("announces").length)
+    } else {
+      announces = []
+    }
+    $.jStorage.set("announces", data)
+    for (let a of announces) {
+      $("#announces").prepend(sprintf(template, a.guid, moment(new Date(new Date(a.date))).fromNow(), a.title, a.message, a.author))
+    }
+    for (let a of data) {
+      $(`#${a.guid} .card .card-header`).text(moment(new Date(new Date(a.date))).fromNow())
+    }
+  })
+  .fail( err => {
+    if(err.status == 401)
+    {
+      Cookies.remove('ctf', {domain: `.${window.location.hostname}`})
+      checkAuth()
+    }
+  })
+}
 function checkProfile() {
   let t = `<div class="d-inline m-2 p-0 text-white">%s </div>`
   $.ajax({
@@ -242,7 +290,9 @@ function checkAuth() {
     $('#registration').show()
     $('#tasks-div').show()
     $('#profile-div').show()
+    $('#announces-div').show()
     loadTasks(0)
+    loadAnnounces(0)
     checkProfile()
   }
   else {
@@ -253,6 +303,7 @@ function checkAuth() {
     $('#login-div').show()
     $("#reset-div").show()
     $('#rules-div').show()
+    $('#announces-div').hide()
   }
 }
 function Auth(user, pass) {
@@ -265,7 +316,7 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: false }) // здесь было true
+        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true, samesite: 'strict' }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
         // Join()
@@ -490,7 +541,7 @@ $("#tasks-list").on('click', '.task', (event) => {
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: false }) 
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: true, samesite: 'strict' }) 
   $.ajaxSetup({
     beforeSend: function (xhr)
     {
@@ -506,6 +557,7 @@ $( document ).ready( () => {
       checkAuth()
     else
       checkInTeam()
-      // loadTasks(1)
+      loadTasks(1)
+      loadAnnounces(0)
   }, 10000)
 })
