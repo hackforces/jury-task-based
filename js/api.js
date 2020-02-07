@@ -316,7 +316,7 @@ function Auth(user, pass) {
   })
   .done( (data, textStatus, xhr) => {
       if (xhr.status === 200 ) {
-        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: true, samesite: 'strict' }) // здесь было true
+        Cookies.set('ctf', data.token, { expires: 7, domain: `.${window.location.hostname}`, secure: false, samesite: 'strict' }) // здесь было true
         $("#profile-div").html('')
         checkAuth()
         // Join()
@@ -541,7 +541,7 @@ $("#tasks-list").on('click', '.task', (event) => {
   }
 })
 if (getUrlParameter('reset')) {
-  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: true, samesite: 'strict' }) 
+  Cookies.set('ctf', getUrlParameter('reset'), { expires: 7, domain: `.${window.location.hostname}`, secure: false, samesite: 'strict' }) 
   $.ajaxSetup({
     beforeSend: function (xhr)
     {
