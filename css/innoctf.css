@@ -165,7 +165,7 @@ h4 {
 .announce {
     margin: 3px 0;
     min-height: 7rem;
-    max-height: 15rem;
+    max-height: 32rem;
 }
 .announce .card-header, .announce .card-footer, .announce .card-body {
     padding: 0.2rem 0.8rem;
